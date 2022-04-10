@@ -20,4 +20,20 @@ typedef struct Xarr {
 
 Xarr* Xinit(int row, int col);
 
+void Xfree(Xarr* arr);
+
+void x_print(Xarr* arr);
+
 Xarr* x_add(Xarr* arr1, Xarr* arr2);
+
+Xarr* x_sub(Xarr* arr1, Xarr* arr2);
+
+//Element wise multiplication
+Xarr* x_multiply(Xarr* arr1, Xarr* arr2);
+
+//Multiplying a scalar to all elements
+Xarr* x_scale(Xarr* arr1, double k);
+
+Xarr* x_dot(Xarr* arr1, Xarr* arr2);
+
+Xarr* x_transpose(Xarr* arr1);

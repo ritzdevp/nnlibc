@@ -23,11 +23,26 @@ int main(){
     }
 
     Xarr* sum = x_add(arr1, arr2);
-    for (int i = 0; i < sum->row; i++){
-        for (int j = 0; j < sum->col; j++){
-            printf("%f ",sum->arr[i][j]);
-        }
-        printf("\n");
-    }
+    // x_print(sum);
+
+    Xarr* sum2 = x_sub(arr1, arr2);
+    // x_print(sum2);
+
+    Xarr* scaled = x_scale(sum2, -1);
+    x_print(scaled);
+    printf("\n");
+    Xarr* trans = x_transpose(scaled);
+    x_print(trans);
+
+    printf("ok \n");
+    x_print(arr1);
+    printf("ok \n");
+    x_print(trans);
+    printf("\n");
+    
+    
+    Xarr* dotted = x_dot(arr1, trans);
+    x_print(dotted);
+
     return 0;
 }
