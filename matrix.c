@@ -33,6 +33,14 @@ Xarr * Xinit(int row, int col){
     return xarr;
 }
 
+void Xfree(Xarr* arr){
+    for (int i = 0; i < arr->row; i++){
+        free(arr->arr[i]);
+    }
+    free(arr->arr);
+    free(arr);
+}
+
 void x_print(Xarr* arr){
     for (int i = 0; i < arr->row; i++){
         for (int j = 0; j < arr->col; j++){
