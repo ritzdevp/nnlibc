@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "activations.h"
-#include "matrix.h"
+
 
 Xarr* act_identity(Xarr* arr){
     Xarr* res = Xinit(arr->row, arr->col);

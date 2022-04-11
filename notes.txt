@@ -1,0 +1,7 @@
+gcc *.c -o Output
+./Output
+
+
+#to link math library use -lm flag
+gcc *.c -lm -o  Output
+./Output

@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "matrix.h"
+#include "activations.h"
 
 
 int main(){
@@ -16,6 +16,12 @@ int main(){
             arr1->arr[i][j] = count++;
         }
     }
+
+    printf("arr1\n");
+    x_print(arr1);
+    printf("\n");
+
+
     for (int i = 0; i < arr2->row; i++){
         for (int j = 0; j < arr2->col; j++){
             arr2->arr[i][j] = count++;
@@ -43,6 +49,22 @@ int main(){
     
     Xarr* dotted = x_dot(arr1, trans);
     x_print(dotted);
+
+    Xarr* iden = act_identity(dotted);
+    printf("\n");
+    x_print(iden);
+
+    Xarr* sig = act_sigmoid(arr1);
+    printf("\n");
+    x_print(sig);
+
+    Xarr* tan = act_tanh(sig);
+    printf("\n");
+    x_print(tan);
+
+    tan->arr[0][0] = -1.234;
+    printf("\n");
+    x_print(act_relu(tan));
 
     return 0;
 }
