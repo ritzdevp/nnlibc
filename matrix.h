@@ -22,6 +22,8 @@ typedef struct Xarr {
 
 Xarr* Xinit(int row, int col);
 
+Xarr* x_ones(int row, int col);
+
 void Xfree(Xarr* arr);
 
 void x_print(Xarr* arr);
@@ -35,6 +37,10 @@ Xarr* x_multiply(Xarr* arr1, Xarr* arr2);
 
 //Multiplying a scalar to all elements
 Xarr* x_scale(Xarr* arr1, double k);
+
+Xarr* x_log(Xarr* arr);
+
+Xarr* x_exp(Xarr* arr);
 
 Xarr* x_dot(Xarr* arr1, Xarr* arr2);
 

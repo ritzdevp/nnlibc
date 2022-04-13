@@ -6,6 +6,7 @@
 #include "activations.h"
 #include "layers.h"
 #include "sequential.h"
+#include "loss.h"
 
 
 int main(){
@@ -109,8 +110,22 @@ int main(){
     printf("%d\n", net->layers[0] == lin);
     printf("%d\n", net->layers[1] == lin2);
     
+    double x[2][3] = {
+        {1,2,3},
+        {4,5,6}
+    };
+    double yy[2][3] = {
+        {1,1,2},
+        {2,1,3}
+    };
 
-    
+    Xarr* X = Xinit(2,3);
+    Xarr* Y = Xinit(2,3);
+    x_fill(X, x);
+    x_fill(Y, yy);
+    printf("OK! \n");
+    x_print(soft_cross_ent_loss(X, Y));
+
 
     return 0;
 }

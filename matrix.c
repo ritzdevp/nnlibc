@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "matrix.h"
 
 
@@ -113,6 +114,17 @@ Xarr* x_dot(Xarr* arr1, Xarr* arr2){
     return res;
 }
 
+//element wise multiplication
+Xarr* x_multiply(Xarr* arr1, Xarr* arr2){
+    Xarr* res = Xinit(arr1->row, arr1->col);
+    for (int i = 0; i < res->row; i++){
+        for (int j = 0; j < res->col; j++){
+            res->arr[i][j] = arr1->arr[i][j] * arr2->arr[i][j];
+        }
+    }
+    return res;
+}
+
 
 //Fills the array of a Xarr struct object 
 //With the elements stored in temp array
@@ -124,4 +136,34 @@ void x_fill(Xarr* arr, void* temp){
         }
     }
     return;
+}
+
+Xarr* x_log(Xarr* arr){
+    Xarr* res = Xinit(arr->row, arr->col);
+    for (int i = 0; i < res->row; i++){
+        for (int j = 0; j < res->col; j++){
+            res->arr[i][j] = log(arr->arr[i][j]);
+        }
+    }
+    return res;
+}
+
+Xarr* x_exp(Xarr* arr){
+    Xarr* res = Xinit(arr->row, arr->col);
+    for (int i = 0; i < res->row; i++){
+        for (int j = 0; j < res->col; j++){
+            res->arr[i][j] = exp(arr->arr[i][j]);
+        }
+    }
+    return res;
+}
+
+Xarr* x_ones(int row, int col){
+    Xarr* arr = Xinit(row, col);
+    for (int i = 0; i < row; i++){
+        for (int j = 0; j < col; j++){
+            arr->arr[i][j] = 1;
+        }
+    }
+    return arr;
 }
