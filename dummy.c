@@ -88,9 +88,12 @@ int main(){
     x_fill(lin->b, b);
     // printf("%f\n", *((w+2)[0]));
 
-
     Xarr* z = forward(xinput, lin);
+    // linear_free(lin);
     x_print(z);
+    printf("\n");
+    Xarr* y = act_tanh(z);
+    x_print(y);
 
     return 0;
 }

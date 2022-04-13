@@ -22,4 +22,14 @@ Xarr* forward(Xarr* input, Linear* linear_layer){
     return linear_layer->z;
 }
 
+void linear_free(Linear* linear_layer){
+    Xfree(linear_layer->W);
+    Xfree(linear_layer->b);
+    //try except
+    if (linear_layer->z != NULL){
+        Xfree(linear_layer->z);
+    }
+    free(linear_layer);
+    return;
+}
 
