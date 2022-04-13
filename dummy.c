@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include "activations.h"
 #include "layers.h"
+#include "sequential.h"
 
 
 int main(){
@@ -92,8 +93,24 @@ int main(){
     // linear_free(lin);
     x_print(z);
     printf("\n");
-    Xarr* y = act_tanh(z);
-    x_print(y);
+    Xarr* y = act_identity(z);
+    Linear* lin2 = linear_init(5,2,1);
+    x_print(forward(y, lin2));
+    // x_print(y);
+    printf("\n");
+
+    Xnet* net = Xnet_init(2);
+    net->layers[0] = lin;
+
+    Activation* act = Act_init("tanh", 1);
+    net->layers[1] = act;
+    x_print(act_forward(net->layers[1], z));
+
+    printf("%d\n", net->layers[0] == lin);
+    printf("%d\n", net->layers[1] == lin2);
+    
+
+    
 
     return 0;
 }

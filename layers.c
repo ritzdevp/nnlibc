@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 #include "layers.h"
 
 Linear* linear_init(int input_size, int output_size, int layer_index){
