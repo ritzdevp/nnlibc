@@ -2,6 +2,8 @@ gcc *.c -o Output
 ./Output
 
 
+https://docs.google.com/document/d/1x3g3VprVutC89KuZSIGCzVa01JmfcnRv3jdFZjro3rE/edit
+
 #to link math library use -lm flag
 #https://ubuntuforums.org/showthread.php?t=765751
 

@@ -67,6 +67,8 @@ int main(){
     // printf("\n");
     // x_print(act_relu(tan));
 
+
+    // TRYING LINEAR LAYER
     Xarr* xinput = Xinit(1,3);
     xinput->arr[0][0] = 1;
     xinput->arr[0][1] = 2;
@@ -80,15 +82,11 @@ int main(){
         {0,1,0,1,0},
         {1,1,1,1,1},
     };
-    double b[5] = {-3,-4,-5,-6,-7};
-    for (int i = 0; i < 3; i++){
-        for (int j = 0; j < 5; j++){
-            lin->W->arr[i][j] = w[i][j];
-        }
-    }
-    for (int i = 0; i < 5; i++){
-        lin->b->arr[0][i] = b[i];
-    }
+    double b[1][5] = {{-3,-4,-5,-6,-7}};
+
+    x_fill(lin->W, w);
+    x_fill(lin->b, b);
+    // printf("%f\n", *((w+2)[0]));
 
 
     Xarr* z = forward(xinput, lin);

@@ -40,5 +40,7 @@ Xarr* x_dot(Xarr* arr1, Xarr* arr2);
 
 Xarr* x_transpose(Xarr* arr1);
 
+void x_fill(Xarr* arr, void* temp);
+
 
 #endif //XARR

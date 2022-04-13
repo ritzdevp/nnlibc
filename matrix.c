@@ -112,3 +112,16 @@ Xarr* x_dot(Xarr* arr1, Xarr* arr2){
     }
     return res;
 }
+
+
+//Fills the array of a Xarr struct object 
+//With the elements stored in temp array
+void x_fill(Xarr* arr, void* temp){
+    double (*array)[arr->col] = temp;
+    for (int i = 0; i < arr->row; i++){
+        for (int j = 0; j < arr->col; j++){
+            arr->arr[i][j] = array[i][j];
+        }
+    }
+    return;
+}
