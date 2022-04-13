@@ -3,5 +3,7 @@ gcc *.c -o Output
 
 
 #to link math library use -lm flag
+#https://ubuntuforums.org/showthread.php?t=765751
+
 gcc *.c -lm -o  Output
-./Output
+./Output 

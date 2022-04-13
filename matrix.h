@@ -11,6 +11,8 @@
 
 // void mxprint(double *arr);
 
+#ifndef XARR
+#define XARR
 
 typedef struct Xarr {
     double ** arr;
@@ -37,3 +39,6 @@ Xarr* x_scale(Xarr* arr1, double k);
 Xarr* x_dot(Xarr* arr1, Xarr* arr2);
 
 Xarr* x_transpose(Xarr* arr1);
+
+
+#endif //XARR
