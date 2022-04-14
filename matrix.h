@@ -28,6 +28,8 @@ void Xfree(Xarr* arr);
 
 void x_print(Xarr* arr);
 
+void x_print_shape(Xarr* arr);
+
 Xarr* x_add(Xarr* arr1, Xarr* arr2);
 
 Xarr* x_sub(Xarr* arr1, Xarr* arr2);

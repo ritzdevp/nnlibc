@@ -85,5 +85,5 @@ Xarr* soft_cross_ent_loss(Xarr* x, Xarr* y){
     // printf("LOSS\n");
     // x_print(loss);
     // printf("\n");
-    return loss;
+    return loss; //shape is (batchsize, 1)
 }

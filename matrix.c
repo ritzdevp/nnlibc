@@ -51,6 +51,11 @@ void x_print(Xarr* arr){
     }
 }
 
+void x_print_shape(Xarr* arr){
+    printf("shape = (%d, %d)\n", arr->row, arr->col);
+    return;
+}
+
 Xarr* x_add(Xarr* arr1, Xarr* arr2){
     Xarr* res = Xinit(arr1->row, arr1->col);
     for (int i = 0; i < res->row; i++){
@@ -90,6 +95,8 @@ Xarr* x_transpose(Xarr* arr1){
     }
     return res;
 }
+
+
 
 Xarr* x_dot(Xarr* arr1, Xarr* arr2){
     //condition: c1 == r2
