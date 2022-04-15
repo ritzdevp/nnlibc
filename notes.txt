@@ -15,3 +15,19 @@ For GSL installation on linux
 Followed this https://www.youtube.com/watch?v=dKBLJN4x_7A
 Make sure to specify lib path using
 export LD_LIBRARY_PATH=/home/rituraj/gsl/lib
+
+Note: For Virutal Box Linux VM, Use terminal to compile, vscode terminal isn't working
+
+
+For MAC installation
+Download gsl-latest.tar.gz from the GSL ftp site and unzip it anywhere (e.g. /Downloads)
+Open the unzipped gsl folder in Terminal (e.g. cd ~/Downloads/gsl-2.4
+Run sudo ./configure && make && make install
+-----
+If the above gives a "permission denied" error, instead try
+sudo make clean
+sudo chown -R $USER .
+./configure && make
+make install
+-----
+compilation command: gcc -Wall example.c -lm -lgsl -lgslcblas -o example
