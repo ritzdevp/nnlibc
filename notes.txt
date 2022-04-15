@@ -8,4 +8,10 @@ https://docs.google.com/document/d/1x3g3VprVutC89KuZSIGCzVa01JmfcnRv3jdFZjro3rE/
 #https://ubuntuforums.org/showthread.php?t=765751
 
 gcc *.c -lm -o  Output
-./Output 
+./Output
+
+
+For GSL installation on linux
+Followed this https://www.youtube.com/watch?v=dKBLJN4x_7A
+Make sure to specify lib path using
+export LD_LIBRARY_PATH=/home/rituraj/gsl/lib
