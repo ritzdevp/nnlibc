@@ -3,21 +3,21 @@
 typedef struct Activation {
     int layer_index; //TO be used later during network creation
     char activation[10];
-    Xarr* y;
+    gsl_matrix* y;
     struct Activation* next;
     struct Activation* prev;
 } Activation;
 
-Xarr* act_identity(Xarr* arr);
+gsl_matrix* act_identity(gsl_matrix* arr);
 
-Xarr* act_sigmoid(Xarr* arr);
+gsl_matrix* act_sigmoid(gsl_matrix* arr);
 
-Xarr* act_tanh(Xarr* arr);
+gsl_matrix* act_tanh(gsl_matrix* arr);
 
-Xarr* act_relu(Xarr* arr);
+gsl_matrix* act_relu(gsl_matrix* arr);
 
 Activation* Act_init(char activation[10], int layer_index);
 
-Xarr* act_forward(Activation* activation, Xarr* input);
+gsl_matrix* act_forward(Activation* activation, gsl_matrix* input);
 
 void act_free(Activation* act);

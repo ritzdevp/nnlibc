@@ -5,47 +5,44 @@
 #include "activations.h"
 
 
-Xarr* act_identity(Xarr* arr){
-    Xarr* res = Xinit(arr->row, arr->col);
-    for (int i = 0; i < arr->row; i++){
-        for (int j = 0; j < arr->col; j++){
-            res->arr[i][j] = arr->arr[i][j];
+gsl_matrix* act_identity(gsl_matrix* arr){
+    gsl_matrix* res = x_init(arr->size1, arr->size2);
+    gsl_matrix_memcpy(res, arr);
+    return res;
+}
+
+gsl_matrix* act_sigmoid(gsl_matrix* arr){
+    gsl_matrix* res = x_init(arr->size1, arr->size2);
+    for (int i = 0; i < res->size1; i++){
+        for (int j = 0; j < res->size2; j++){
+            double temp = 1.0/(1 + exp(-gsl_matrix_get(arr, i, j)));
+            gsl_matrix_set(res, i, j, temp);
         }
     }
     return res;
 }
 
-Xarr* act_sigmoid(Xarr* arr){
-    Xarr* res = Xinit(arr->row, arr->col);
-    for (int i = 0; i < arr->row; i++){
-        for (int j = 0; j < arr->col; j++){
-            double temp = 1.0/(1 + exp(-arr->arr[i][j]));
-            res->arr[i][j] = temp;
+gsl_matrix* act_tanh(gsl_matrix* arr){
+    gsl_matrix* res = x_init(arr->size1, arr->size2);
+    for (int i = 0; i < res->size1; i++){
+        for (int j = 0; j < res->size2; j++){
+            double temp = tanh(gsl_matrix_get(arr, i, j));
+            gsl_matrix_set(res, i, j, temp);
         }
     }
     return res;
 }
 
-Xarr* act_tanh(Xarr* arr){
-    Xarr* res = Xinit(arr->row, arr->col);
-    for (int i = 0; i < arr->row; i++){
-        for (int j = 0; j < arr->col; j++){
-            double temp = tanh(arr->arr[i][j]);
-            res->arr[i][j] = temp;
-        }
-    }
-    return res;
-}
+gsl_matrix* act_relu(gsl_matrix* arr){
+    gsl_matrix* res = x_init(arr->size1, arr->size2);
 
-Xarr* act_relu(Xarr* arr){
-    Xarr* res = Xinit(arr->row, arr->col);
-    for (int i = 0; i < arr->row; i++){
-        for (int j = 0; j < arr->col; j++){
+    for (int i = 0; i < res->size1; i++){
+        for (int j = 0; j < arr->size2; j++){
             double temp = 0;
-            if (arr->arr[i][j] > 0){
-                temp = arr->arr[i][j];
+            if (gsl_matrix_get(arr, i, j) > 0){
+                temp = gsl_matrix_get(arr, i, j);
             }
-            res->arr[i][j] = temp;
+            gsl_matrix_set(res, i, j, temp);
         }
     }
     return res;
@@ -58,7 +55,7 @@ Activation* Act_init(char activation[10], int layer_index){
     return act;
 }
 
-Xarr* act_forward(Activation* act, Xarr* input){
+gsl_matrix* act_forward(Activation* act, gsl_matrix* input){
     if (strcmp(act->activation, "relu") == 0){
         act->y = act_relu(input);
     }
@@ -69,4 +66,10 @@ Xarr* act_forward(Activation* act, Xarr* input){
         act->y = act_tanh(input);
     }
     return act->y;
+}
+
+void act_free(Activation* act){
+    x_free(act->y);
+    free(act);
+    return;
 }
