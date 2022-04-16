@@ -14,41 +14,39 @@
 #ifndef XARR
 #define XARR
 
-typedef struct Xarr {
-    double ** arr;
-    int row;
-    int col;
-} Xarr;
+#include <gsl/gsl_blas.h>
+#include <gsl/gsl_vector.h>
+#include <gsl/gsl_matrix.h>
 
-Xarr* Xinit(int row, int col);
+gsl_matrix* x_init(int row, int cols);
 
-Xarr* x_ones(int row, int col);
+gsl_matrix* x_ones(int row, int col);
 
-void Xfree(Xarr* arr);
+void x_free(gsl_matrix* arr);
 
-void x_print(Xarr* arr);
+void x_print(gsl_matrix* arr);
 
-void x_print_shape(Xarr* arr);
+void x_print_shape(gsl_matrix* arr);
 
-Xarr* x_add(Xarr* arr1, Xarr* arr2);
+gsl_matrix* x_add(gsl_matrix* arr1, gsl_matrix* arr2);
 
-Xarr* x_sub(Xarr* arr1, Xarr* arr2);
+gsl_matrix* x_sub(gsl_matrix* arr1, gsl_matrix* arr2);
 
 //Element wise multiplication
-Xarr* x_multiply(Xarr* arr1, Xarr* arr2);
+gsl_matrix* x_multiply(gsl_matrix* arr1, gsl_matrix* arr2);
 
 //Multiplying a scalar to all elements
-Xarr* x_scale(Xarr* arr1, double k);
+gsl_matrix* x_scale(gsl_matrix* arr1, double k);
 
-Xarr* x_log(Xarr* arr);
+gsl_matrix* x_log(gsl_matrix* arr);
 
-Xarr* x_exp(Xarr* arr);
+gsl_matrix* x_exp(gsl_matrix* arr);
 
-Xarr* x_dot(Xarr* arr1, Xarr* arr2);
+gsl_matrix* x_dot(gsl_matrix* arr1, gsl_matrix* arr2);
 
-Xarr* x_transpose(Xarr* arr1);
+gsl_matrix* x_transpose(gsl_matrix* arr1);
 
-void x_fill(Xarr* arr, void* temp);
+void x_fill(gsl_matrix* arr, void* temp);
 
 
 #endif //XARR

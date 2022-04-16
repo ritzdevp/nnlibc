@@ -4,6 +4,8 @@ gcc *.c -o Output
 
 https://docs.google.com/document/d/1x3g3VprVutC89KuZSIGCzVa01JmfcnRv3jdFZjro3rE/edit
 
+https://www.math.utah.edu/software/gsl/gsl-ref_toc.html
+
 #to link math library use -lm flag
 #https://ubuntuforums.org/showthread.php?t=765751
 
@@ -19,7 +21,7 @@ export LD_LIBRARY_PATH=/home/rituraj/gsl/lib
 Note: For Virutal Box Linux VM, Use terminal to compile, vscode terminal isn't working
 
 
-For MAC installation
+For MAC installation (https://gist.github.com/TysonRayJones/af7bedcdb8dc59868c7966232b4da903)
 Download gsl-latest.tar.gz from the GSL ftp site and unzip it anywhere (e.g. /Downloads)
 Open the unzipped gsl folder in Terminal (e.g. cd ~/Downloads/gsl-2.4
 Run sudo ./configure && make && make install

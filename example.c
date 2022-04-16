@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <gsl/gsl_sf_bessel.h>
 
-int
-main (void)
+int main (void)
 {
     double x = 15.0;
     double y = gsl_sf_bessel_J0 (x);

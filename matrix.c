@@ -16,161 +16,141 @@
 #include "matrix.h"
 
 
-Xarr * Xinit(int row, int col){
-    Xarr * xarr = malloc(sizeof(Xarr));
-    xarr->row = row;
-    xarr->col = col;
+gsl_matrix* x_init(int row, int col){
+    gsl_matrix* arr = gsl_matrix_calloc(row, col);
+    return arr;
+}
 
-    xarr->arr = (double **)malloc(row * sizeof(double *));
-    for (int i = 0; i < row; i++){
-        xarr->arr[i] = malloc(col * sizeof(double));
-    }
+void x_free(gsl_matrix* arr){
+    gsl_matrix_free(arr);
+    return;
+}
 
+void x_print(gsl_matrix* arr){
+    int row = arr->size1;
+    int col = arr->size2;
     for (int i = 0; i < row; i++){
         for (int j = 0; j < col; j++){
-            xarr->arr[i][j] = 0;
-        }
-    }
-    return xarr;
-}
-
-void Xfree(Xarr* arr){
-    for (int i = 0; i < arr->row; i++){
-        free(arr->arr[i]);
-    }
-    free(arr->arr);
-    free(arr);
-}
-
-void x_print(Xarr* arr){
-    for (int i = 0; i < arr->row; i++){
-        for (int j = 0; j < arr->col; j++){
-            printf("%f ",arr->arr[i][j]);
+            printf("%f ",gsl_matrix_get(arr, i, j));
         }
         printf("\n");
     }
 }
 
-void x_print_shape(Xarr* arr){
-    printf("shape = (%d, %d)\n", arr->row, arr->col);
+void x_print_shape(gsl_matrix* arr){
+    int row = arr->size1;
+    int col = arr->size2;
+    printf("shape = (%d, %d)\n", row, col);
     return;
 }
 
-Xarr* x_add(Xarr* arr1, Xarr* arr2){
-    Xarr* res = Xinit(arr1->row, arr1->col);
-    for (int i = 0; i < res->row; i++){
-        for (int j = 0; j < res->col; j++){
-            res->arr[i][j] = arr1->arr[i][j] + arr2->arr[i][j];
-        }
-    }
-    return res;
+gsl_matrix* x_add(gsl_matrix* arr1, gsl_matrix* arr2){
+    gsl_matrix* arr1_copy = gsl_matrix_calloc(arr1->size1, arr1->size2);
+    gsl_matrix_memcpy(arr1_copy, arr1);
+    //gsl_matrix_add does a[i][j] += b[i][j]
+    //Hence, we make a copy first, so as to not alter the original array
+    gsl_matrix_add(arr1_copy, arr2);
+    return arr1_copy;
 }
 
-Xarr* x_sub(Xarr* arr1, Xarr* arr2){
-    Xarr* res = Xinit(arr1->row, arr1->col);
-    for (int i = 0; i < res->row; i++){
-        for (int j = 0; j < res->col; j++){
-            res->arr[i][j] = arr1->arr[i][j] - arr2->arr[i][j];
-        }
-    }
-    return res;
+gsl_matrix* x_sub(gsl_matrix* arr1, gsl_matrix* arr2){
+    gsl_matrix* arr1_copy = gsl_matrix_calloc(arr1->size1, arr1->size2);
+    gsl_matrix_memcpy(arr1_copy, arr1);
+    gsl_matrix_sub(arr1_copy, arr2);
+    return arr1_copy;
 }
 
-Xarr* x_scale(Xarr* arr1, double k){
-    Xarr* res = Xinit(arr1->row, arr1->col);
-    for (int i = 0; i < res->row; i++){
-        for (int j = 0; j < res->col; j++){
-            res->arr[i][j] = k * arr1->arr[i][j];
-        }
-    }
-    return res;
+gsl_matrix* x_scale(gsl_matrix* arr1, double k){
+    gsl_matrix* arr1_copy = gsl_matrix_calloc(arr1->size1, arr1->size2);
+    gsl_matrix_memcpy(arr1_copy, arr1);
+    gsl_matrix_scale(arr1_copy, k);
+    return arr1_copy;
 }
 
-Xarr* x_transpose(Xarr* arr1){
-    Xarr* res = Xinit(arr1->col, arr1->row);
-    for (int i = 0; i < arr1->row; i++){
-        for (int j = 0; j < arr1->col; j++){
-            res->arr[j][i] = arr1->arr[i][j];
-        }
-    }
-    return res;
+gsl_matrix* x_transpose(gsl_matrix* arr1){
+    gsl_matrix* arr1_trans = gsl_matrix_calloc(arr1->size2, arr1->size1);
+    gsl_matrix_transpose_memcpy(arr1_trans, arr1);
+    return arr1_trans;
 }
 
 
 
-Xarr* x_dot(Xarr* arr1, Xarr* arr2){
+gsl_matrix* x_dot(gsl_matrix* arr1, gsl_matrix* arr2){
+    //https://www.gnu.org/software/gsl/doc/html/blas.html#examples
+
     //condition: c1 == r2
-    if (arr1->col != arr2->row){
-        printf("Dim error: Can't dot (%d, %d) with (%d, %d)\n",
-        arr1->row, arr1->col, arr2->row, arr2->col);
+    if (arr1->size2 != arr2->size1){
+        printf("Dim error: Can't dot (%lu, %lu) with (%lu, %lu)\n",
+        arr1->size1, arr1->size2, arr2->size1, arr2->size2);
         return NULL;
     }
     
     //res shape: r1xc2
+    // gsl_matrix* res = x_init(arr1->size1, arr2->size2);
+    
+    gsl_matrix_view A = gsl_matrix_submatrix(arr1, 0, 0, arr1->size1, arr1->size2);
+    gsl_matrix_view B = gsl_matrix_submatrix(arr2, 0, 0, arr2->size1, arr2->size2);
+    double* res_arr = malloc(sizeof(double)*arr1->size1*arr2->size2);
+    gsl_matrix_view res = gsl_matrix_view_array(res_arr, arr1->size1, arr2->size2);
 
-    Xarr* res = Xinit(arr1->row, arr2->col);
-    for (int row_1 = 0; row_1 < arr1->row; row_1++){
-        for (int col_2 = 0; col_2 < arr2->col; col_2++){
-            double temp_sum = 0;
-            for (int i = 0; i < arr1->col; i++){
-                temp_sum += arr1->arr[row_1][i] * arr2->arr[i][col_2];
-            }
-            res->arr[row_1][col_2] = temp_sum;
+    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans,
+                  1.0, &A.matrix, &B.matrix,
+                  0.0, &res.matrix);
+
+    gsl_matrix* ans = x_init(arr1->size1, arr2->size2);
+    int k = 0;
+    for (int i = 0; i < ans->size1; i++){
+        for (int j = 0; j < ans->size2; j++){
+            gsl_matrix_set(ans, i, j, res_arr[k]);
+            k++;
         }
     }
-    return res;
+    return ans;
 }
 
 //element wise multiplication
-Xarr* x_multiply(Xarr* arr1, Xarr* arr2){
-    Xarr* res = Xinit(arr1->row, arr1->col);
-    for (int i = 0; i < res->row; i++){
-        for (int j = 0; j < res->col; j++){
-            res->arr[i][j] = arr1->arr[i][j] * arr2->arr[i][j];
-        }
-    }
-    return res;
+gsl_matrix* x_multiply(gsl_matrix* arr1, gsl_matrix* arr2){
+    gsl_matrix* arr1_copy = gsl_matrix_calloc(arr1->size1, arr1->size2);
+    gsl_matrix_memcpy(arr1_copy, arr1);
+    gsl_matrix_mul_elements(arr1_copy, arr2);
+    return arr1_copy;
 }
 
 
 //Fills the array of a Xarr struct object 
 //With the elements stored in temp array
-void x_fill(Xarr* arr, void* temp){
-    double (*array)[arr->col] = temp;
-    for (int i = 0; i < arr->row; i++){
-        for (int j = 0; j < arr->col; j++){
-            arr->arr[i][j] = array[i][j];
+void x_fill(gsl_matrix* arr, void* temp){
+    double (*array)[arr->size2] = temp;
+    for (int i = 0; i < arr->size1; i++){
+        for (int j = 0; j < arr->size2; j++){
+            gsl_matrix_set(arr, i, j, array[i][j]);
         }
     }
     return;
 }
 
-Xarr* x_log(Xarr* arr){
-    Xarr* res = Xinit(arr->row, arr->col);
-    for (int i = 0; i < res->row; i++){
-        for (int j = 0; j < res->col; j++){
-            res->arr[i][j] = log(arr->arr[i][j]);
+gsl_matrix* x_log(gsl_matrix* arr){
+    gsl_matrix* res = x_init(arr->size1, arr->size2);
+    for (int i = 0; i < res->size1; i++){
+        for (int j = 0; j < res->size2; j++){
+            gsl_matrix_set(res, i, j, log(gsl_matrix_get(arr, i, j)));
         }
     }
     return res;
 }
 
-Xarr* x_exp(Xarr* arr){
-    Xarr* res = Xinit(arr->row, arr->col);
-    for (int i = 0; i < res->row; i++){
-        for (int j = 0; j < res->col; j++){
-            res->arr[i][j] = exp(arr->arr[i][j]);
+gsl_matrix* x_exp(gsl_matrix* arr){
+    gsl_matrix* res = x_init(arr->size1, arr->size2);
+    for (int i = 0; i < res->size1; i++){
+        for (int j = 0; j < res->size2; j++){
+            gsl_matrix_set(res, i, j, exp(gsl_matrix_get(arr, i, j)));
         }
     }
     return res;
 }
 
-Xarr* x_ones(int row, int col){
-    Xarr* arr = Xinit(row, col);
-    for (int i = 0; i < row; i++){
-        for (int j = 0; j < col; j++){
-            arr->arr[i][j] = 1;
-        }
-    }
-    return arr;
+gsl_matrix* x_ones(int row, int col){
+    gsl_matrix* temp = x_init(row, col);
+    gsl_matrix_set_all(temp, 1);
+    return temp;
 }
