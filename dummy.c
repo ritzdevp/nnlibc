@@ -71,10 +71,11 @@ int main(){
 
 
     // TRYING LINEAR LAYER
-    Xarr* xinput = Xinit(1,3);
-    xinput->arr[0][0] = 1;
-    xinput->arr[0][1] = 2;
-    xinput->arr[0][2] = 3;
+    gsl_matrix* xinput = x_init(1,3);
+    gsl_matrix_set(xinput, 0, 0, 1);
+    gsl_matrix_set(xinput, 0,0, 1);
+    gsl_matrix_set(xinput, 0,1,2);
+    gsl_matrix_set(xinput, 0,2,3);
     x_print(xinput);
     printf("\n");
 
@@ -90,11 +91,11 @@ int main(){
     x_fill(lin->b, b);
     // printf("%f\n", *((w+2)[0]));
 
-    Xarr* z = forward(xinput, lin);
+    gsl_matrix* z = forward(xinput, lin);
     // linear_free(lin);
     x_print(z);
     printf("\n");
-    Xarr* y = act_identity(z);
+    gsl_matrix* y = act_identity(z);
     Linear* lin2 = linear_init(5,2,1);
     x_print(forward(y, lin2));
     // x_print(y);
@@ -119,8 +120,8 @@ int main(){
         {2,1,3}
     };
 
-    Xarr* X = Xinit(2,3);
-    Xarr* Y = Xinit(2,3);
+    gsl_matrix* X = x_init(2,3);
+    gsl_matrix* Y = x_init(2,3);
     x_fill(X, x);
     x_fill(Y, yy);
     printf("OK! \n");

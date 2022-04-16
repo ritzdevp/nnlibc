@@ -3,42 +3,42 @@
 #include <math.h>
 #include "loss.h"
 
-Xarr* soft_cross_ent_loss(Xarr* x, Xarr* y){
+gsl_matrix* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
     //using logsumexp trick to avoid overflow
     //https://gregorygundersen.com/blog/2020/02/09/log-sum-exp/
     
     //my logsum exp
     //https://colab.research.google.com/drive/1y0xG8OhUmGzp0-agktAMMVynlMsjZGbl#scrollTo=m5-mW1XYgfjm
 
-    double max = x->arr[0][0];
-    for (int i = 0; i < x->row; i++){
-        for (int j = 0; j < x->col; j++){
-            if (x->arr[i][j] > max){
-                max = x->arr[i][j];
+    double max = gsl_matrix_get(x, 0, 0);
+    for (int i = 0; i < x->size1; i++){
+        for (int j = 0; j < x->size2; j++){
+            if (gsl_matrix_get(x, i, j) > max){
+                max = gsl_matrix_get(x, i, j);
             }
         }
     }
-    Xarr* all_max = x_scale(x_ones(x->row, x->col), max);
+    gsl_matrix* all_max = x_scale(x_ones(x->size1, x->size2), max);
     
     //x - max
-    Xarr* x_minus_max = x_sub(x, all_max);
+    gsl_matrix* x_minus_max = x_sub(x, all_max);
     // printf("XMINUSMAXNUM\n");
     // x_print(x_minus_max);
     // printf("\n");
 
-    Xarr* exp_term = x_exp(x_minus_max);
+    gsl_matrix* exp_term = x_exp(x_minus_max);
     // printf("EXP TERM\n");
     // x_print(exp_term);
     // printf("\n");
 
-    Xarr* sum_term = Xinit(exp_term->row, 1);
+    gsl_matrix* sum_term = x_init(exp_term->size1, 1);
 
-    for (int i = 0; i < exp_term->row; i++){
+    for (int i = 0; i < exp_term->size1; i++){
         double temp = 0;
-        for (int j = 0; j < exp_term->col; j++){
-            temp += exp_term->arr[i][j];
+        for (int j = 0; j < exp_term->size2; j++){
+            temp += gsl_matrix_get(exp_term, i, j);
         }
-        sum_term->arr[i][0] = temp;
+        gsl_matrix_set(sum_term, i, 0, temp);
     }
 
     // printf("SUM TERM\n");
@@ -46,42 +46,42 @@ Xarr* soft_cross_ent_loss(Xarr* x, Xarr* y){
     // printf("\n");
 
     // printf("LOG TERM\n");
-    Xarr* log_term = x_log(sum_term);
+    gsl_matrix* log_term = x_log(sum_term);
     // x_print(log_term);
     // printf("\n");
     
 
     // printf("LOGSOFT\n");
-    Xarr* log_term_temp = Xinit(x_minus_max->row, x_minus_max->col);
-    for (int i = 0; i < log_term_temp->row; i++){
-        for (int j = 0; j < log_term_temp->col; j++){
-            log_term_temp->arr[i][j] = log_term->arr[i][0];
+    gsl_matrix* log_term_temp = x_init(x_minus_max->size1, x_minus_max->size2);
+    for (int i = 0; i < log_term_temp->size1; i++){
+        for (int j = 0; j < log_term_temp->size2; j++){
+            gsl_matrix_set(log_term_temp, i, j, gsl_matrix_get(log_term, i, 0));
         }
     }
-    Xarr* logsoft = x_sub(x_minus_max, log_term_temp);
+    gsl_matrix* logsoft = x_sub(x_minus_max, log_term_temp);
     // x_print(logsoft);
     // printf("\n");
 
     // printf("SOFTMAX\n");
-    Xarr* softmax = x_exp(logsoft);
+    // gsl_matrix* softmax = x_exp(logsoft);
     // x_print(softmax);
     // printf("\n");
 
     // printf("PROD\n");
-    Xarr* prod = x_multiply(y, logsoft);
+    gsl_matrix* prod = x_multiply(y, logsoft);
     // x_print(prod);
     // printf("\n");
 
-    Xarr* temp_arr = Xinit(y->row, 1);
-    for (int i = 0; i < prod->row; i++){
+    gsl_matrix* temp_arr = x_init(y->size1, 1);
+    for (int i = 0; i < prod->size1; i++){
         double temp = 0;
-        for (int j = 0; j < prod->col; j++){
-            temp += prod->arr[i][j];
+        for (int j = 0; j < prod->size2; j++){
+            temp += gsl_matrix_get(prod, i, j);
         }
-        temp_arr->arr[i][0] = temp;
+        gsl_matrix_set(temp_arr, i, 0, temp);
     }
 
-    Xarr* loss = x_scale(temp_arr, -1);
+    gsl_matrix* loss = x_scale(temp_arr, -1);
     // printf("LOSS\n");
     // x_print(loss);
     // printf("\n");
