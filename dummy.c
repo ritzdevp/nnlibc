@@ -170,5 +170,21 @@ int main(){
     x_print(soft_cross_ent_loss(out, desired)->loss);
     x_print(soft_cross_ent_loss(out, desired)->loss_derivative);
 
+    printf("\nMEAN PRAC\n");
+    double fun[3][4] = {
+        {1,2,3,4},
+        {2,3.7,4.5,5},
+        {3,4,5,6}
+    };
+    
+    gsl_matrix* funmat = x_init(3,4);
+    x_fill(funmat, fun);
+    for (int i = 0; i < funmat->size1*funmat->size2; i++){
+        printf("%f\n", funmat->data[i]);
+    }
+    printf("mean = %f\n", x_mean(funmat));
+    x_print(x_mean_axis(funmat, 0));
+    x_print(x_mean_axis(funmat, 1));
+
     return 0;
 }

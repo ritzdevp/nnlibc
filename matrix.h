@@ -17,6 +17,7 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
+#include <gsl/gsl_statistics.h>
 
 gsl_matrix* x_init(int row, int cols);
 
@@ -45,6 +46,10 @@ gsl_matrix* x_exp(gsl_matrix* arr);
 gsl_matrix* x_dot(gsl_matrix* arr1, gsl_matrix* arr2);
 
 gsl_matrix* x_transpose(gsl_matrix* arr1);
+
+double x_mean(gsl_matrix* arr);
+
+gsl_matrix* x_mean_axis(gsl_matrix* arr, int axis);
 
 void x_fill(gsl_matrix* arr, void* temp);
 

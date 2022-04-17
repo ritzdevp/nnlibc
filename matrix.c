@@ -154,3 +154,34 @@ gsl_matrix* x_ones(int row, int col){
     gsl_matrix_set_all(temp, 1);
     return temp;
 }
+
+double x_mean(gsl_matrix* arr){
+    int len = arr->size1 * arr->size2;
+    return gsl_stats_mean(arr->data, 1, len);
+}
+
+//Note: in gsl_stats_mean(data, stride, number of elements)
+//stride is the number of hops made during summation
+gsl_matrix* x_mean_axis(gsl_matrix* arr, int axis){
+    int row = arr->size1;
+    int col = arr->size2;
+    if (axis == 0){
+        gsl_matrix* res = x_init(1, col);
+        for (int i = 0; i < col; i++){
+            //stride will be number of cols
+            double mean_temp = gsl_stats_mean(arr->data+i, col, row);
+            gsl_matrix_set(res, 0, i, mean_temp);
+        }
+        return res;
+    }
+    else if (axis == 1){
+        gsl_matrix* res = x_init(1, row);
+        for (int i = 0; i < row; i++){
+            double mean_temp = gsl_stats_mean(arr->data + (i*col), 1, col);
+            gsl_matrix_set(res, 0, i, mean_temp);
+        }
+        return res;
+    }
+    printf("Axis should be either 0 or 1.\n");
+    return NULL;
+}
