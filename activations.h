@@ -1,3 +1,6 @@
+#ifndef ACTIV
+#define ACTIV
+
 #include "matrix.h"
 
 typedef struct Activation {
@@ -5,6 +8,7 @@ typedef struct Activation {
     char activation[10];
     gsl_matrix* y; //output y = f(z)
     gsl_matrix* derivative; //f'(z)
+    gsl_matrix* input;
     struct Activation* next;
     struct Activation* prev;
 } Activation;
@@ -24,3 +28,5 @@ gsl_matrix* act_forward(Activation* activation, gsl_matrix* input);
 gsl_matrix* act_backward(Activation* act, gsl_matrix* input);
 
 void act_free(Activation* act);
+
+#endif

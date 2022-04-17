@@ -86,6 +86,7 @@ Activation* Act_init(char activation[10], int layer_index){
 }
 
 gsl_matrix* act_forward(Activation* act, gsl_matrix* input){
+    act->input = input;
     if (strcmp(act->activation, "relu") == 0){
         act->y = act_relu(input);
     }

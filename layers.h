@@ -1,3 +1,6 @@
+#ifndef LINEAR
+#define LINEAR
+
 //Linear layer
 
 #include "matrix.h"
@@ -28,3 +31,5 @@ void linear_free(Linear* linear_layer);
 gsl_matrix* forward(gsl_matrix* input, Linear* linear_layer);
 
 gsl_matrix* backward(Linear* linear_layer, gsl_matrix* dLdz);
+
+#endif

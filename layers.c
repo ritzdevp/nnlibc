@@ -33,6 +33,7 @@ gsl_matrix* backward(Linear* linear_layer, gsl_matrix* dLdz){
     //dLdb = mean(dLdz, axis=0, keepdims=True)
     linear_layer->dLdb = x_mean_axis(dLdz, 0);
 
+    //dLdx = dLdz.dot(W.T)
     gsl_matrix* dLdx = x_dot(dLdz, x_transpose(linear_layer->W));
 
     return dLdx;
@@ -41,7 +42,7 @@ gsl_matrix* backward(Linear* linear_layer, gsl_matrix* dLdz){
 void linear_free(Linear* linear_layer){
     x_free(linear_layer->W);
     x_free(linear_layer->b);
-    //try except
+
     if (linear_layer->z != NULL){
         x_free(linear_layer->z);
     }

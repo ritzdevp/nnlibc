@@ -185,3 +185,9 @@ gsl_matrix* x_mean_axis(gsl_matrix* arr, int axis){
     printf("Axis should be either 0 or 1.\n");
     return NULL;
 }
+
+gsl_matrix* x_copy(gsl_matrix* src){
+    gsl_matrix* dest = gsl_matrix_calloc(src->size1, src->size2);
+    gsl_matrix_memcpy(dest, src);
+    return dest;
+}

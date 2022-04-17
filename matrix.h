@@ -53,5 +53,6 @@ gsl_matrix* x_mean_axis(gsl_matrix* arr, int axis);
 
 void x_fill(gsl_matrix* arr, void* temp);
 
+gsl_matrix* x_copy(gsl_matrix* src);
 
 #endif //XARR
