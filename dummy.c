@@ -125,7 +125,8 @@ int main(){
     x_fill(X, x);
     x_fill(Y, yy);
     printf("OK! \n");
-    x_print(soft_cross_ent_loss(X, Y));
+    x_print(soft_cross_ent_loss(X, Y)->loss);
+    x_print(soft_cross_ent_loss(X, Y)->loss_derivative);
 
     printf("=====\nNEURAL NETWORK\n");
     gsl_matrix* myxinput = x_init(1,2); //row vector
@@ -166,7 +167,8 @@ int main(){
     x_fill(desired, temp);
 
     //finding softmax crossentropy loss
-    x_print(soft_cross_ent_loss(out, desired));
+    x_print(soft_cross_ent_loss(out, desired)->loss);
+    x_print(soft_cross_ent_loss(out, desired)->loss_derivative);
 
     return 0;
 }

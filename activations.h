@@ -3,7 +3,8 @@
 typedef struct Activation {
     int layer_index; //TO be used later during network creation
     char activation[10];
-    gsl_matrix* y;
+    gsl_matrix* y; //output y = f(z)
+    gsl_matrix* derivative; //f'(z)
     struct Activation* next;
     struct Activation* prev;
 } Activation;

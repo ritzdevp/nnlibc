@@ -4,7 +4,7 @@
 #include "loss.h"
 
 //accepts one hot vector of y
-gsl_matrix* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
+Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
     //using logsumexp trick to avoid overflow
     //https://gregorygundersen.com/blog/2020/02/09/log-sum-exp/
     
@@ -62,7 +62,7 @@ gsl_matrix* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
     // printf("\n");
 
     // printf("SOFTMAX\n");
-    // gsl_matrix* softmax = x_exp(logsoft);
+    gsl_matrix* softmax = x_exp(logsoft);
     // x_print(softmax);
     // printf("\n");
 
@@ -84,5 +84,11 @@ gsl_matrix* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
     // printf("LOSS\n");
     // x_print(loss);
     // printf("\n");
-    return loss; //shape is (batchsize, 1)
+    Loss_Item* loss_item = malloc(sizeof(Loss_Item));
+    loss_item->loss = loss;
+
+    gsl_matrix* loss_deriv = x_sub(softmax, y);
+    loss_item->loss_derivative = loss_deriv;
+
+    return loss_item; //shape is (batchsize, 1)
 }
