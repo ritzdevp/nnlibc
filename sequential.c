@@ -6,6 +6,7 @@
 Xnet* Xnet_init(int num_layers){
     Xnet* net = malloc(sizeof(Xnet));
     net->layers = malloc(sizeof(void*)*num_layers);
+    return net;
 }
 
 void xnet_add(Xnet* net, void* layer, int layer_index){

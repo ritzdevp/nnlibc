@@ -71,10 +71,11 @@ int main(){
 
 
     // TRYING LINEAR LAYER
-    Xarr* xinput = Xinit(1,3);
-    xinput->arr[0][0] = 1;
-    xinput->arr[0][1] = 2;
-    xinput->arr[0][2] = 3;
+    gsl_matrix* xinput = x_init(1,3);
+    gsl_matrix_set(xinput, 0, 0, 1);
+    gsl_matrix_set(xinput, 0,0, 1);
+    gsl_matrix_set(xinput, 0,1,2);
+    gsl_matrix_set(xinput, 0,2,3);
     x_print(xinput);
     printf("\n");
 
@@ -90,14 +91,14 @@ int main(){
     x_fill(lin->b, b);
     // printf("%f\n", *((w+2)[0]));
 
-    Xarr* z = forward(xinput, lin);
+    gsl_matrix* z = forward(xinput, lin);
     // linear_free(lin);
     x_print(z);
     printf("\n");
-    Xarr* y = act_identity(z);
+    gsl_matrix* y = act_identity(z);
     Linear* lin2 = linear_init(5,2,1);
     x_print(forward(y, lin2));
-    // x_print(y);
+    x_print(y);
     printf("\n");
 
     Xnet* net = Xnet_init(2);
@@ -119,13 +120,71 @@ int main(){
         {2,1,3}
     };
 
-    Xarr* X = Xinit(2,3);
-    Xarr* Y = Xinit(2,3);
+    gsl_matrix* X = x_init(2,3);
+    gsl_matrix* Y = x_init(2,3);
     x_fill(X, x);
     x_fill(Y, yy);
     printf("OK! \n");
-    x_print(soft_cross_ent_loss(X, Y));
+    x_print(soft_cross_ent_loss(X, Y)->loss);
+    x_print(soft_cross_ent_loss(X, Y)->loss_derivative);
 
+    printf("=====\nNEURAL NETWORK\n");
+    gsl_matrix* myxinput = x_init(1,2); //row vector
+
+    //Making model
+    Linear* layer1 = linear_init(2,3,1); //layer 1, layer 0 is input itself
+    Activation* act1 = Act_init("relu", 2);
+    Linear* layer2 = linear_init(3,2,3);
+    Activation* act2 = Act_init("sigmoid", 4);
+
+    //Manually setting weights
+    double w1[2][3] = {
+        {1,2,3},
+        {3,2,1}
+    };
+    double b1[1][3] = {{1,0,1}};
+    x_fill(layer1->W, w1);
+    x_fill(layer1->b, b1);
+
+    double w2[3][2] = {
+        {1,0},
+        {2,0},
+        {1,1}
+    };
+    double b2[1][3] = {{1,2}};
+    x_fill(layer2->W, w2);
+    x_fill(layer2->b, b2);
+
+    //forward
+    gsl_matrix* out = forward(myxinput, layer1);
+    out = act_forward(act1, out);
+    out = forward(out, layer2);
+    out = act_forward(act2, out);
+
+
+    gsl_matrix* desired = x_init(1, 2);
+    double temp[1][2] = {{1,0}};
+    x_fill(desired, temp);
+
+    //finding softmax crossentropy loss
+    x_print(soft_cross_ent_loss(out, desired)->loss);
+    x_print(soft_cross_ent_loss(out, desired)->loss_derivative);
+
+    printf("\nMEAN PRAC\n");
+    double fun[3][4] = {
+        {1,2,3,4},
+        {2,3.7,4.5,5},
+        {3,4,5,6}
+    };
+    
+    gsl_matrix* funmat = x_init(3,4);
+    x_fill(funmat, fun);
+    for (int i = 0; i < funmat->size1*funmat->size2; i++){
+        printf("%f\n", funmat->data[i]);
+    }
+    printf("mean = %f\n", x_mean(funmat));
+    x_print(x_mean_axis(funmat, 0));
+    x_print(x_mean_axis(funmat, 1));
 
     return 0;
 }
