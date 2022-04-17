@@ -108,7 +108,7 @@ gsl_matrix* act_backward(Activation* act, gsl_matrix* input){
     else if (strcmp(act->activation, "tanh") == 0){
         act->derivative = act_tanh_derivative(act->y);
     }
-    return act->derivative;
+    return act->derivative; //f'(z)
 }
 
 void act_free(Activation* act){

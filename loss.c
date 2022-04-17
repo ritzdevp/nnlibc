@@ -85,10 +85,10 @@ Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
     // x_print(loss);
     // printf("\n");
     Loss_Item* loss_item = malloc(sizeof(Loss_Item));
-    loss_item->loss = loss;
+    loss_item->loss = loss; //shape is (batchsize, 1)
 
     gsl_matrix* loss_deriv = x_sub(softmax, y);
-    loss_item->loss_derivative = loss_deriv;
+    loss_item->loss_derivative = loss_deriv; //shape is (batchsize, number of classes)
 
-    return loss_item; //shape is (batchsize, 1)
+    return loss_item;
 }
