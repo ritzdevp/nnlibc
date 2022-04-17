@@ -98,7 +98,7 @@ int main(){
     gsl_matrix* y = act_identity(z);
     Linear* lin2 = linear_init(5,2,1);
     x_print(forward(y, lin2));
-    // x_print(y);
+    x_print(y);
     printf("\n");
 
     Xnet* net = Xnet_init(2);
@@ -127,6 +127,46 @@ int main(){
     printf("OK! \n");
     x_print(soft_cross_ent_loss(X, Y));
 
+    printf("=====\nNEURAL NETWORK\n");
+    gsl_matrix* myxinput = x_init(1,2); //row vector
+
+    //Making model
+    Linear* layer1 = linear_init(2,3,1); //layer 1, layer 0 is input itself
+    Activation* act1 = Act_init("relu", 2);
+    Linear* layer2 = linear_init(3,2,3);
+    Activation* act2 = Act_init("sigmoid", 4);
+
+    //Manually setting weights
+    double w1[2][3] = {
+        {1,2,3},
+        {3,2,1}
+    };
+    double b1[1][3] = {{1,0,1}};
+    x_fill(layer1->W, w1);
+    x_fill(layer1->b, b1);
+
+    double w2[3][2] = {
+        {1,0},
+        {2,0},
+        {1,1}
+    };
+    double b2[1][3] = {{1,2}};
+    x_fill(layer2->W, w2);
+    x_fill(layer2->b, b2);
+
+    //forward
+    gsl_matrix* out = forward(myxinput, layer1);
+    out = act_forward(act1, out);
+    out = forward(out, layer2);
+    out = act_forward(act2, out);
+
+
+    gsl_matrix* desired = x_init(1, 2);
+    double temp[1][2] = {{1,0}};
+    x_fill(desired, temp);
+
+    //finding softmax crossentropy loss
+    x_print(soft_cross_ent_loss(out, desired));
 
     return 0;
 }

@@ -3,6 +3,7 @@
 #include <math.h>
 #include "loss.h"
 
+//accepts one hot vector of y
 gsl_matrix* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
     //using logsumexp trick to avoid overflow
     //https://gregorygundersen.com/blog/2020/02/09/log-sum-exp/
@@ -41,8 +42,6 @@ gsl_matrix* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
         gsl_matrix_set(sum_term, i, 0, temp);
     }
 
-    // printf("SUM TERM\n");
-    x_print(sum_term);
     // printf("\n");
 
     // printf("LOG TERM\n");
