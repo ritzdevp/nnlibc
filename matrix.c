@@ -38,9 +38,9 @@ void x_print(gsl_matrix* arr){
 }
 
 void x_print_shape(gsl_matrix* arr){
-    int row = arr->size1;
-    int col = arr->size2;
-    printf("shape = (%d, %d)\n", row, col);
+    size_t row = arr->size1;
+    size_t col = arr->size2;
+    printf("shape = (%lu, %lu)\n", row, col);
     return;
 }
 

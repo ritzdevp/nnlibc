@@ -5,27 +5,30 @@
 
 Xnet* Xnet_init(int num_layers){
     Xnet* net = malloc(sizeof(Xnet));
-    net->layers = malloc(sizeof(void*)*num_layers);
+    net->layers = malloc(sizeof(void*)*num_layers*2); //factor 2 because of activation layer
     net->layer_iterator = 0;
-    net->num_layers = num_layers;
+    net->num_layers = num_layers; //number of dense layers (linear+activation)
     return net;
 }
 
 void xnet_add(Xnet* net, void* layer){
     net->layers[net->layer_iterator] = layer;
+
     net->layer_iterator += 1;
     return;
 }
 
 gsl_matrix* net_forward(gsl_matrix* input, Xnet* net){
-
+    // printf("IN net forward\n");
     gsl_matrix* out = forward(input, net->layers[0]);
+    // printf("first forward\n");
     out = act_forward(net->layers[1], out);
-    for (int i = 2; i < net->num_layers * 2; i=i+2){
+    for (int i = 2; i < net->num_layers*2; i=i+2){
         //First linear then activation, hence, linears are at even positions
-        
         out = forward(out, (Linear*)net->layers[i]); //linear forward
+        // printf("temp forward\n");
         out = act_forward((Activation*)net->layers[i + 1], out);
+        // printf("temp act\n");
     }
 
     return out;
@@ -45,7 +48,7 @@ void net_backward(gsl_matrix* target, Xnet* net){
 
     gsl_matrix* dLdz;
 
-    for (int i = net->num_layers * 2 - 1; i >= 0; i=i-2){
+    for (int i = net->num_layers*2 - 1; i >= 0; i=i-2){
         //last layer is activation, second last is linear and so on
 
         Activation* act_temp = (Activation*)(net->layers[i]);

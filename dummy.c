@@ -128,14 +128,72 @@ int main(){
     x_print(soft_cross_ent_loss(X, Y)->loss);
     x_print(soft_cross_ent_loss(X, Y)->loss_derivative);
 
-    printf("=====\nNEURAL NETWORK\n");
-    gsl_matrix* myxinput = x_init(1,2); //row vector
+    // printf("=====\nNEURAL NETWORK\n");
+    // gsl_matrix* myxinput = x_init(1,2); //row vector
+
+    // //Making model
+    // Linear* layer1 = linear_init(2,3,1); //layer 1, layer 0 is input itself
+    // Activation* act1 = Act_init("relu", 2);
+    // Linear* layer2 = linear_init(3,2,3);
+    // Activation* act2 = Act_init("sigmoid", 4);
+
+    // //Manually setting weights
+    // double w1[2][3] = {
+    //     {1,2,3},
+    //     {3,2,1}
+    // };
+    // double b1[1][3] = {{1,0,1}};
+    // x_fill(layer1->W, w1);
+    // x_fill(layer1->b, b1);
+
+    // double w2[3][2] = {
+    //     {1,0},
+    //     {2,0},
+    //     {1,1}
+    // };
+    // double b2[1][3] = {{1,2}};
+    // x_fill(layer2->W, w2);
+    // x_fill(layer2->b, b2);
+
+    // //forward
+    // gsl_matrix* out = forward(myxinput, layer1);
+    // out = act_forward(act1, out);
+    // out = forward(out, layer2);
+    // out = act_forward(act2, out);
+
+
+    // gsl_matrix* desired = x_init(1, 2);
+    // double temp[1][2] = {{1,0}};
+    // x_fill(desired, temp);
+
+    // //finding softmax crossentropy loss
+    // x_print(soft_cross_ent_loss(out, desired)->loss);
+    // x_print(soft_cross_ent_loss(out, desired)->loss_derivative);
+
+    printf("\n === NEURAL NETWORK WITH SEQUENTIAL FILE === \n");
+
+    Xnet* mynet = Xnet_init(3);
+
+    gsl_matrix* myinput = x_init(1,2); //row vector
+    double temp_arr[1][2] = {{-1,9}};
+    x_fill(myinput, temp_arr);
 
     //Making model
-    Linear* layer1 = linear_init(2,3,1); //layer 1, layer 0 is input itself
-    Activation* act1 = Act_init("relu", 2);
-    Linear* layer2 = linear_init(3,2,3);
-    Activation* act2 = Act_init("sigmoid", 4);
+    Linear* lin_layer1 = linear_init(2,3,0);
+    xnet_add(mynet, lin_layer1);
+    Activation* act1 = Act_init("sigmoid", 1);
+    xnet_add(mynet, act1);
+
+    Linear* lin_layer2 = linear_init(3,2,2);
+    xnet_add(mynet, lin_layer2);
+    Activation* act2 = Act_init("relu", 3);
+    xnet_add(mynet, act2);
+
+    Linear* lin_layer3 = linear_init(2,2,4);
+    xnet_add(mynet, lin_layer3);
+    Activation* act3 = Act_init("sigmoid", 5);
+    xnet_add(mynet, act3);
+
 
     //Manually setting weights
     double w1[2][3] = {
@@ -143,8 +201,8 @@ int main(){
         {3,2,1}
     };
     double b1[1][3] = {{1,0,1}};
-    x_fill(layer1->W, w1);
-    x_fill(layer1->b, b1);
+    x_fill(lin_layer1->W, w1);
+    x_fill(lin_layer2->b, b1);
 
     double w2[3][2] = {
         {1,0},
@@ -152,39 +210,29 @@ int main(){
         {1,1}
     };
     double b2[1][3] = {{1,2}};
-    x_fill(layer2->W, w2);
-    x_fill(layer2->b, b2);
+    x_fill(lin_layer2->W, w2);
+    x_fill(lin_layer2->b, b2);
 
-    //forward
-    gsl_matrix* out = forward(myxinput, layer1);
-    out = act_forward(act1, out);
-    out = forward(out, layer2);
-    out = act_forward(act2, out);
+    double w3[2][2] = {
+        {1,2},
+        {-1,3}
+    };
+    double b3[1][2] = {{1,3}};
+    x_fill(lin_layer3->W, w3);
+    x_fill(lin_layer3->b, b3);
 
-
+    //desired target labels
     gsl_matrix* desired = x_init(1, 2);
     double temp[1][2] = {{1,0}};
     x_fill(desired, temp);
 
-    //finding softmax crossentropy loss
-    x_print(soft_cross_ent_loss(out, desired)->loss);
-    x_print(soft_cross_ent_loss(out, desired)->loss_derivative);
+    //forward pass
+    gsl_matrix* output = net_forward(myinput, mynet);
+    printf("Forward OK\n");
+    net_backward(desired, mynet);
+    printf("Backward OK\n");
 
-    printf("\nMEAN PRAC\n");
-    double fun[3][4] = {
-        {1,2,3,4},
-        {2,3.7,4.5,5},
-        {3,4,5,6}
-    };
-    
-    gsl_matrix* funmat = x_init(3,4);
-    x_fill(funmat, fun);
-    for (int i = 0; i < funmat->size1*funmat->size2; i++){
-        printf("%f\n", funmat->data[i]);
-    }
-    printf("mean = %f\n", x_mean(funmat));
-    x_print(x_mean_axis(funmat, 0));
-    x_print(x_mean_axis(funmat, 1));
+    x_print(output);
 
     return 0;
 }

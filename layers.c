@@ -19,8 +19,12 @@ Linear* linear_init(int input_size, int output_size, int layer_index){
 
 gsl_matrix* forward(gsl_matrix* input, Linear* linear_layer){
     //z = x.dot(W) + b
+    // printf("HELLO1\n");
+    // printf("%p\n", linear_layer);
     linear_layer->x = input;
+    // printf("HELLO2\n");
     linear_layer->z = x_add(x_dot(input, linear_layer->W), linear_layer->b);
+    // printf("HELLO3\n");
     return linear_layer->z;
 }
 
