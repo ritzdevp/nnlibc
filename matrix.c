@@ -191,3 +191,10 @@ gsl_matrix* x_copy(gsl_matrix* src){
     gsl_matrix_memcpy(dest, src);
     return dest;
 }
+
+void zerofy_matrix(gsl_matrix* arr){
+    for (int i = 0; i < arr->size1*arr->size2; i++){
+        arr->data[i] = 0;
+    }
+    return;
+}

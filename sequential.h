@@ -20,3 +20,5 @@ void xnet_add(Xnet* net, void* layer);
 gsl_matrix* net_forward(gsl_matrix* input, Xnet* net);
 
 void net_backward(gsl_matrix* target, Xnet* net);
+
+void zero_grad(Xnet* net);

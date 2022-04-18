@@ -58,3 +58,11 @@ void net_backward(gsl_matrix* target, Xnet* net){
     }
     return;
 }
+
+void zero_grad(Xnet* net){
+    for (int i = 0; i < net->num_layers*2; i=i+2){
+        Linear* lin_temp = (Linear*)net->layers[i];
+        zerofy_matrix(lin_temp->dLdW);
+        zerofy_matrix(lin_temp->dLdb);
+    }
+}

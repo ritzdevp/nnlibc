@@ -23,6 +23,8 @@ gsl_matrix* x_init(int row, int cols);
 
 gsl_matrix* x_ones(int row, int col);
 
+void zerofy_matrix(gsl_matrix* arr);
+
 void x_free(gsl_matrix* arr);
 
 void x_print(gsl_matrix* arr);

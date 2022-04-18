@@ -231,8 +231,20 @@ int main(){
     printf("Forward OK\n");
     net_backward(desired, mynet);
     printf("Backward OK\n");
-
+    
     x_print(output);
+    printf("dLdW1\n");
+    Linear* tempL = (Linear*)(mynet->layers[0]);
+    x_print(tempL->dLdW);
+    tempL = (Linear*)(mynet->layers[2]);
+    printf("dLdW2\n");
+    x_print(tempL->dLdW);
+    tempL = (Linear*)(mynet->layers[4]);
+    printf("dLdW3\n");
+    x_print(tempL->dLdW);
+    // x_print(mynet->layers[0]->b);
+
+    // zero_grad(mynet);
 
     return 0;
 }
