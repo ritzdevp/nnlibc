@@ -43,23 +43,32 @@ void net_backward(gsl_matrix* target, Xnet* net){
     
     //loss item has loss and loss derivative wrt final output
     Loss_Item* L = soft_cross_ent_loss(network_output, target);
+    printf("Loss\n");
+    x_print(L->loss);
 
     gsl_matrix* dLdy = x_copy(L->loss_derivative);
-
+    printf("dldy\n");
+    x_print(dLdy);
+    
     gsl_matrix* dLdz;
 
     for (int i = net->num_layers*2 - 1; i >= 0; i=i-2){
         //last layer is activation, second last is linear and so on
 
         Activation* act_temp = (Activation*)(net->layers[i]);
-        dLdz = x_multiply(act_backward(act_temp, act_temp->input), dLdy);
+        printf("HELLO\n");
+        x_print(act_backward(act_temp));
+        dLdz = x_multiply(act_backward(act_temp), dLdy);
+        printf("dLdz\n");
+        x_print(dLdz);
+
         Linear* lin_temp = (Linear*)(net->layers[i - 1]);
         dLdy = backward(lin_temp, dLdz);
     }
     return;
 }
 
-void zero_grad(Xnet* net){
+void net_zero_grad(Xnet* net){
     for (int i = 0; i < net->num_layers * 2; i = i + 2){
         Linear* lin_temp = (Linear*)net->layers[i];
         zerofy_matrix(lin_temp->dLdW);
@@ -67,7 +76,7 @@ void zero_grad(Xnet* net){
     }
 }
 
-void step(double learning_rate){
+void net_step(Xnet* net, double learning_rate){
     for (int i = 0; i < net->num_layers * 2; i = i + 2){
         Linear* lin_temp = (Linear*)net->layers[i];
 
@@ -76,6 +85,14 @@ void step(double learning_rate){
         //gsl_matrix_sub subtracts from the first array itself, which is desired here
         //w = w - dLdz
         //b = b - dLdb
+
+        // printf("===\n");
+        // printf("W\n");
+        // x_print(lin_temp->W);
+        // printf("dldw\n");
+        // x_print(lin_temp->dLdW);
+        // printf("===\n");
+        
         gsl_matrix_sub(lin_temp->W, x_scale(lin_temp->dLdW, learning_rate));
         gsl_matrix_sub(lin_temp->b, x_scale(lin_temp->dLdb, learning_rate));
     }

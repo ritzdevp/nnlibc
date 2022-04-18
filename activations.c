@@ -99,7 +99,7 @@ gsl_matrix* act_forward(Activation* act, gsl_matrix* input){
     return act->y;
 }
 
-gsl_matrix* act_backward(Activation* act, gsl_matrix* input){
+gsl_matrix* act_backward(Activation* act){
     if (strcmp(act->activation, "relu") == 0){
         act->derivative = act_relu_derivative(act->y);
     }

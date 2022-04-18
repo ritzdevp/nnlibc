@@ -21,4 +21,6 @@ gsl_matrix* net_forward(gsl_matrix* input, Xnet* net);
 
 void net_backward(gsl_matrix* target, Xnet* net);
 
-void zero_grad(Xnet* net);
+void net_zero_grad(Xnet* net);
+
+void net_step(Xnet* net, double learning_rate);

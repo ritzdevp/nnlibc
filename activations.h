@@ -25,7 +25,7 @@ Activation* Act_init(char activation[10], int layer_index);
 
 gsl_matrix* act_forward(Activation* activation, gsl_matrix* input);
 
-gsl_matrix* act_backward(Activation* act, gsl_matrix* input);
+gsl_matrix* act_backward(Activation* act);
 
 void act_free(Activation* act);
 

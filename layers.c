@@ -33,7 +33,9 @@ gsl_matrix* backward(Linear* linear_layer, gsl_matrix* dLdz){
     
     //dldW = (1/bs) * (x.T.dot(dLdz))
     linear_layer->dLdW = x_scale(x_dot(x_transpose(linear_layer->x), dLdz), (double)(1/batch_size));
-    
+    // printf("HELLO\n");
+    // x_print(linear_layer->dLdW);
+    // x_print(dLdz);
     //dLdb = mean(dLdz, axis=0, keepdims=True)
     linear_layer->dLdb = x_mean_axis(dLdz, 0);
 

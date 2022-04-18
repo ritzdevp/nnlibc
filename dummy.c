@@ -186,7 +186,7 @@ int main(){
 
     Linear* lin_layer2 = linear_init(3,2,2);
     xnet_add(mynet, lin_layer2);
-    Activation* act2 = Act_init("relu", 3);
+    Activation* act2 = Act_init("sigmoid", 3);
     xnet_add(mynet, act2);
 
     Linear* lin_layer3 = linear_init(2,2,4);
@@ -196,55 +196,107 @@ int main(){
 
 
     //Manually setting weights
-    double w1[2][3] = {
-        {1,2,3},
-        {3,2,1}
-    };
-    double b1[1][3] = {{1,0,1}};
-    x_fill(lin_layer1->W, w1);
-    x_fill(lin_layer2->b, b1);
+    // double w1[2][3] = {
+    //     {1,2,3},
+    //     {3,2,1}
+    // };
+    // double b1[1][3] = {{1,0,1}};
+    // x_fill(lin_layer1->W, w1);
+    // x_fill(lin_layer2->b, b1);
 
-    double w2[3][2] = {
-        {1,0},
-        {2,0},
-        {1,1}
-    };
-    double b2[1][3] = {{1,2}};
-    x_fill(lin_layer2->W, w2);
-    x_fill(lin_layer2->b, b2);
+    // double w2[3][2] = {
+    //     {1,0},
+    //     {2,0},
+    //     {1,1}
+    // };
+    // double b2[1][3] = {{1,2}};
+    // x_fill(lin_layer2->W, w2);
+    // x_fill(lin_layer2->b, b2);
 
-    double w3[2][2] = {
-        {1,2},
-        {-1,3}
-    };
-    double b3[1][2] = {{1,3}};
-    x_fill(lin_layer3->W, w3);
-    x_fill(lin_layer3->b, b3);
+    // double w3[2][2] = {
+    //     {1,2},
+    //     {-1,3}
+    // };
+    // double b3[1][2] = {{1,3}};
+    // x_fill(lin_layer3->W, w3);
+    // x_fill(lin_layer3->b, b3);
 
     //desired target labels
+
+
     gsl_matrix* desired = x_init(1, 2);
-    double temp[1][2] = {{1,0}};
+    double temp[1][2] = {{0,1}};
     x_fill(desired, temp);
 
-    //forward pass
-    gsl_matrix* output = net_forward(myinput, mynet);
-    printf("Forward OK\n");
-    net_backward(desired, mynet);
-    printf("Backward OK\n");
-    
-    x_print(output);
-    printf("dLdW1\n");
-    Linear* tempL = (Linear*)(mynet->layers[0]);
-    x_print(tempL->dLdW);
-    tempL = (Linear*)(mynet->layers[2]);
-    printf("dLdW2\n");
-    x_print(tempL->dLdW);
-    tempL = (Linear*)(mynet->layers[4]);
-    printf("dLdW3\n");
-    x_print(tempL->dLdW);
-    // x_print(mynet->layers[0]->b);
 
-    // zero_grad(mynet);
+    // gsl_matrix* output = net_forward(myinput, mynet);
+    // printf("Forward OK\n");
+    // net_backward(desired, mynet);
+    // printf("Backward OK\n");
+    
+    // x_print(output);
+    // printf("dLdW1\n");
+    // Linear* tempL = (Linear*)(mynet->layers[0]);
+    // x_print(tempL->dLdW);
+    // tempL = (Linear*)(mynet->layers[2]);
+    // printf("dLdW2\n");
+    // x_print(tempL->dLdW);
+    // tempL = (Linear*)(mynet->layers[4]);
+    // printf("dLdW3\n");
+    // x_print(tempL->dLdW);
+    // // x_print(mynet->layers[0]->b);
+
+    // printf("Network output\n");
+    // x_print(output);
+    // printf("Desired\n");
+    // x_print(desired);
+    // net_step(mynet, 0.01);
+    // net_zero_grad(mynet);
+
+
+    //forward pass
+    for (int i = 0; i < 100; i++){ //training
+        gsl_matrix* output = net_forward(myinput, mynet);
+        net_backward(desired, mynet);
+
+        printf("Network output\n");
+        x_print(output);
+        printf("Desired\n");
+        x_print(desired);
+
+        printf("W1\n");
+        Linear* tempL = (Linear*)(mynet->layers[0]);
+        x_print(tempL->W);
+        printf("W2\n");
+        tempL = (Linear*)(mynet->layers[2]);
+        x_print(tempL->W);
+        printf("W3\n");
+        tempL = (Linear*)(mynet->layers[4]);
+        x_print(tempL->W);
+
+        net_step(mynet, 0.1);
+        net_zero_grad(mynet);    
+    }
+    // x_print(net_forward(myinput, mynet));
+    // printf("W1\n");
+    // Linear* tempL = (Linear*)(mynet->layers[0]);
+    // x_print(tempL->W);
+    // printf("W2\n");
+    // tempL = (Linear*)(mynet->layers[2]);
+    // x_print(tempL->W);
+    // printf("W3\n");
+    // tempL = (Linear*)(mynet->layers[4]);
+    // x_print(tempL->W);
+
+    // printf("b1\n");
+    // tempL = (Linear*)(mynet->layers[0]);
+    // x_print(tempL->b);
+    // printf("b2\n");
+    // tempL = (Linear*)(mynet->layers[2]);
+    // x_print(tempL->b);
+    // printf("b3\n");
+    // tempL = (Linear*)(mynet->layers[4]);
+    // x_print(tempL->b);
 
     return 0;
 }
