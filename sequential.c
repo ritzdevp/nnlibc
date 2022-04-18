@@ -60,9 +60,23 @@ void net_backward(gsl_matrix* target, Xnet* net){
 }
 
 void zero_grad(Xnet* net){
-    for (int i = 0; i < net->num_layers*2; i=i+2){
+    for (int i = 0; i < net->num_layers * 2; i = i + 2){
         Linear* lin_temp = (Linear*)net->layers[i];
         zerofy_matrix(lin_temp->dLdW);
         zerofy_matrix(lin_temp->dLdb);
+    }
+}
+
+void step(double learning_rate){
+    for (int i = 0; i < net->num_layers * 2; i = i + 2){
+        Linear* lin_temp = (Linear*)net->layers[i];
+
+        //gsl_matrix_sub(a,b) => a=a-b
+        //Didn't use x_sub because it returns a matrix
+        //gsl_matrix_sub subtracts from the first array itself, which is desired here
+        //w = w - dLdz
+        //b = b - dLdb
+        gsl_matrix_sub(lin_temp->W, x_scale(lin_temp->dLdW, learning_rate));
+        gsl_matrix_sub(lin_temp->b, x_scale(lin_temp->dLdb, learning_rate));
     }
 }
