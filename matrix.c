@@ -50,6 +50,7 @@ gsl_matrix* x_add(gsl_matrix* arr1, gsl_matrix* arr2){
     //gsl_matrix_add does a[i][j] += b[i][j]
     //Hence, we make a copy first, so as to not alter the original array
     gsl_matrix_add(arr1_copy, arr2);
+    // printf("Add success\n");
     return arr1_copy;
 }
 
@@ -105,6 +106,7 @@ gsl_matrix* x_dot(gsl_matrix* arr1, gsl_matrix* arr2){
             k++;
         }
     }
+    // printf("Dot success\n");
     return ans;
 }
 
@@ -197,4 +199,14 @@ void zerofy_matrix(gsl_matrix* arr){
         arr->data[i] = 0;
     }
     return;
+}
+
+gsl_matrix* x_broadcast_vector(gsl_matrix* arr, int rows){
+    gsl_matrix* res = gsl_matrix_calloc(rows, arr->size2);
+    for (int i = 0; i < res->size1; i++){
+        for (int j = 0; j < res->size2; j++){
+            gsl_matrix_set(res, i, j, gsl_matrix_get(arr, 0, j));
+        }
+    }
+    return res;
 }

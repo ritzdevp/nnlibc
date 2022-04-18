@@ -255,8 +255,10 @@ int main(){
 
 
     //forward pass
-    for (int i = 0; i < 100; i++){ //training
+    for (int i = 0; i < 1000; i++){ //training
+        printf("RUNNING\n");
         gsl_matrix* output = net_forward(myinput, mynet);
+        
         net_backward(desired, mynet);
 
         printf("Network output\n");

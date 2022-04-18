@@ -57,4 +57,6 @@ void x_fill(gsl_matrix* arr, void* temp);
 
 gsl_matrix* x_copy(gsl_matrix* src);
 
+gsl_matrix* x_broadcast_vector(gsl_matrix* arr, int rows);
+
 #endif //XARR

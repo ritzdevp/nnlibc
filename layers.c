@@ -23,7 +23,10 @@ gsl_matrix* forward(gsl_matrix* input, Linear* linear_layer){
     // printf("%p\n", linear_layer);
     linear_layer->x = input;
     // printf("HELLO2\n");
+    
     linear_layer->z = x_add(x_dot(input, linear_layer->W), linear_layer->b);
+    // linear_layer->z = x_add(x_dot(input, linear_layer->W), x_broadcast_vector(linear_layer->b, input->size1));
+    
     // printf("HELLO3\n");
     return linear_layer->z;
 }

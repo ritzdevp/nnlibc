@@ -47,8 +47,8 @@ void net_backward(gsl_matrix* target, Xnet* net){
     x_print(L->loss);
 
     gsl_matrix* dLdy = x_copy(L->loss_derivative);
-    printf("dldy\n");
-    x_print(dLdy);
+    // printf("dldy\n");
+    // x_print(dLdy);
     
     gsl_matrix* dLdz;
 
@@ -56,11 +56,11 @@ void net_backward(gsl_matrix* target, Xnet* net){
         //last layer is activation, second last is linear and so on
 
         Activation* act_temp = (Activation*)(net->layers[i]);
-        printf("HELLO\n");
-        x_print(act_backward(act_temp));
+        // printf("HELLO\n");
+        // x_print(act_backward(act_temp));
         dLdz = x_multiply(act_backward(act_temp), dLdy);
-        printf("dLdz\n");
-        x_print(dLdz);
+        // printf("dLdz\n");
+        // x_print(dLdz);
 
         Linear* lin_temp = (Linear*)(net->layers[i - 1]);
         dLdy = backward(lin_temp, dLdz);
