@@ -43,4 +43,9 @@ While following the above blog
 I had to install clang on my linux VM
 else I was getting "c compiler cannot create executables"
 
+To compile using emscripten
+emcc *.c -o Output.wasm -I/opt/gsl-2.7.1/include -L/opt/gsl-2.7.1/lib -lgsl -lm -lgslcblas -lc -s STANDALONE_WASM
+
+To run the wasm executable Output.wasm
+wasmer Output.wasm
 
