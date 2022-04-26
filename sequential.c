@@ -56,7 +56,6 @@ void net_backward(gsl_matrix* target, Xnet* net){
         //last layer is activation, second last is linear and so on
 
         Activation* act_temp = (Activation*)(net->layers[i]);
-        // printf("HELLO\n");
         // x_print(act_backward(act_temp));
         dLdz = x_multiply(act_backward(act_temp), dLdy);
         // printf("dLdz\n");

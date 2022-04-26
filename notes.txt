@@ -35,3 +35,12 @@ make install
 compilation command: gcc -Wall example.c -lm -lgsl -lgslcblas -o example
 
 For full compilation: gcc -Wall *.c -lm -lgsl -lgslcblas -o Output
+
+
+
+https://rob-blackbourn.github.io/blog/webassembly/wasm/javascript/c/clang/wasi-sdk/cross-compile/2020/06/24/wasm-gsl.html
+While following the above blog
+I had to install clang on my linux VM
+else I was getting "c compiler cannot create executables"
+
+
