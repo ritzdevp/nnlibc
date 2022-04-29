@@ -19,15 +19,14 @@ Linear* linear_init(int input_size, int output_size, int layer_index){
 
 gsl_matrix* forward(gsl_matrix* input, Linear* linear_layer){
     //z = x.dot(W) + b
-    // printf("HELLO1\n");
-    // printf("%p\n", linear_layer);
     linear_layer->x = input;
-    // printf("HELLO2\n");
+
+    //Works only for batchsize == 1
+    // linear_layer->z = x_add(x_dot(input, linear_layer->W), linear_layer->b);
     
-    linear_layer->z = x_add(x_dot(input, linear_layer->W), linear_layer->b);
-    // linear_layer->z = x_add(x_dot(input, linear_layer->W), x_broadcast_vector(linear_layer->b, input->size1));
+    //Need broadcast if doing with batch_size > 1
+    linear_layer->z = x_add(x_dot(input, linear_layer->W), x_broadcast_vector(linear_layer->b, input->size1));
     
-    // printf("HELLO3\n");
     return linear_layer->z;
 }
 
@@ -36,9 +35,7 @@ gsl_matrix* backward(Linear* linear_layer, gsl_matrix* dLdz){
     
     //dldW = (1/bs) * (x.T.dot(dLdz))
     linear_layer->dLdW = x_scale(x_dot(x_transpose(linear_layer->x), dLdz), (double)(1/batch_size));
-    // printf("HELLO\n");
-    // x_print(linear_layer->dLdW);
-    // x_print(dLdz);
+
     //dLdb = mean(dLdz, axis=0, keepdims=True)
     linear_layer->dLdb = x_mean_axis(dLdz, 0);
 

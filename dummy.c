@@ -174,58 +174,59 @@ int main(){
 
     Xnet* mynet = Xnet_init(3);
 
-    gsl_matrix* myinput = x_init(1,2); //row vector
-    double temp_arr[1][2] = {{-1,9}};
+    //this example has batch size == 2
+    gsl_matrix* myinput = x_init(2,2); //row vector
+    double temp_arr[2][2] = {{1,2}, {2,3}};
     x_fill(myinput, temp_arr);
 
     //Making model
-    Linear* lin_layer1 = linear_init(2,3,0);
+    Linear* lin_layer1 = linear_init(2,2,0);
     xnet_add(mynet, lin_layer1);
     Activation* act1 = Act_init("sigmoid", 1);
     xnet_add(mynet, act1);
 
-    Linear* lin_layer2 = linear_init(3,2,2);
+    Linear* lin_layer2 = linear_init(2,3,2);
     xnet_add(mynet, lin_layer2);
     Activation* act2 = Act_init("sigmoid", 3);
     xnet_add(mynet, act2);
 
-    Linear* lin_layer3 = linear_init(2,2,4);
+    Linear* lin_layer3 = linear_init(3,2,4);
     xnet_add(mynet, lin_layer3);
     Activation* act3 = Act_init("sigmoid", 5);
     xnet_add(mynet, act3);
 
 
     //Manually setting weights
-    // double w1[2][3] = {
-    //     {1,2,3},
-    //     {3,2,1}
-    // };
-    // double b1[1][3] = {{1,0,1}};
-    // x_fill(lin_layer1->W, w1);
-    // x_fill(lin_layer2->b, b1);
+    double w1[2][2] = {
+        {1,-2},
+        {3,-1}
+    };
+    double b1[1][2] = {{1,1}};
+    x_fill(lin_layer1->W, w1);
+    x_fill(lin_layer2->b, b1);
 
-    // double w2[3][2] = {
-    //     {1,0},
-    //     {2,0},
-    //     {1,1}
-    // };
-    // double b2[1][3] = {{1,2}};
-    // x_fill(lin_layer2->W, w2);
-    // x_fill(lin_layer2->b, b2);
+    double w2[2][3] = {
+        {2,1,3},
+        {1,2,-1},
+    };
+    double b2[1][3] = {{-1,-1,-1}};
+    x_fill(lin_layer2->W, w2);
+    x_fill(lin_layer2->b, b2);
 
-    // double w3[2][2] = {
-    //     {1,2},
-    //     {-1,3}
-    // };
-    // double b3[1][2] = {{1,3}};
-    // x_fill(lin_layer3->W, w3);
-    // x_fill(lin_layer3->b, b3);
+    double w3[3][2] = {
+        {2,2},
+        {-1,-2},
+        {2,3}
+    };
+    double b3[1][2] = {{1,2}};
+    x_fill(lin_layer3->W, w3);
+    x_fill(lin_layer3->b, b3);
 
     //desired target labels
 
 
-    gsl_matrix* desired = x_init(1, 2);
-    double temp[1][2] = {{0,1}};
+    gsl_matrix* desired = x_init(2, 2);
+    double temp[2][2] = {{1,0}, {0,1}};
     x_fill(desired, temp);
 
 
@@ -255,7 +256,7 @@ int main(){
 
 
     //forward pass
-    for (int i = 0; i < 1000; i++){ //training
+    for (int i = 0; i < 2000; i++){ //training
         printf("RUNNING\n");
         gsl_matrix* output = net_forward(myinput, mynet);
         
@@ -275,6 +276,8 @@ int main(){
         printf("W3\n");
         tempL = (Linear*)(mynet->layers[4]);
         x_print(tempL->W);
+        printf("W3 dldw\n");
+        x_print(tempL->dLdW);
 
         net_step(mynet, 0.1);
         net_zero_grad(mynet);    

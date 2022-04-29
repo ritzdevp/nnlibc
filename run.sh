@@ -1,3 +1,3 @@
-gcc *.c -lm -o  Output
+gcc -Wall *.c -lm -lgsl -lgslcblas -o Output
 
 ./Output

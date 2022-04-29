@@ -19,16 +19,12 @@ void xnet_add(Xnet* net, void* layer){
 }
 
 gsl_matrix* net_forward(gsl_matrix* input, Xnet* net){
-    // printf("IN net forward\n");
     gsl_matrix* out = forward(input, net->layers[0]);
-    // printf("first forward\n");
     out = act_forward(net->layers[1], out);
     for (int i = 2; i < net->num_layers*2; i=i+2){
         //First linear then activation, hence, linears are at even positions
         out = forward(out, (Linear*)net->layers[i]); //linear forward
-        // printf("temp forward\n");
         out = act_forward((Activation*)net->layers[i + 1], out);
-        // printf("temp act\n");
     }
 
     return out;
@@ -47,8 +43,6 @@ void net_backward(gsl_matrix* target, Xnet* net){
     x_print(L->loss);
 
     gsl_matrix* dLdy = x_copy(L->loss_derivative);
-    // printf("dldy\n");
-    // x_print(dLdy);
     
     gsl_matrix* dLdz;
 
@@ -56,10 +50,8 @@ void net_backward(gsl_matrix* target, Xnet* net){
         //last layer is activation, second last is linear and so on
 
         Activation* act_temp = (Activation*)(net->layers[i]);
-        // x_print(act_backward(act_temp));
+
         dLdz = x_multiply(act_backward(act_temp), dLdy);
-        // printf("dLdz\n");
-        // x_print(dLdz);
 
         Linear* lin_temp = (Linear*)(net->layers[i - 1]);
         dLdy = backward(lin_temp, dLdz);
@@ -84,14 +76,8 @@ void net_step(Xnet* net, double learning_rate){
         //gsl_matrix_sub subtracts from the first array itself, which is desired here
         //w = w - dLdz
         //b = b - dLdb
-
-        // printf("===\n");
-        // printf("W\n");
-        // x_print(lin_temp->W);
-        // printf("dldw\n");
-        // x_print(lin_temp->dLdW);
-        // printf("===\n");
         
+        //No momentum
         gsl_matrix_sub(lin_temp->W, x_scale(lin_temp->dLdW, learning_rate));
         gsl_matrix_sub(lin_temp->b, x_scale(lin_temp->dLdb, learning_rate));
     }

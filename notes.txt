@@ -34,8 +34,10 @@ make install
 -----
 compilation command: gcc -Wall example.c -lm -lgsl -lgslcblas -o example
 
-For full compilation: gcc -Wall *.c -lm -lgsl -lgslcblas -o Output
 
+##################################################################
+For full compilation: gcc -Wall *.c -lm -lgsl -lgslcblas -o Output
+##################################################################
 
 
 https://rob-blackbourn.github.io/blog/webassembly/wasm/javascript/c/clang/wasi-sdk/cross-compile/2020/06/24/wasm-gsl.html
