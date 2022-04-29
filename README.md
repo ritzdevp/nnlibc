@@ -35,6 +35,58 @@ sudo make install
 GSL will be installed at /opt/gsl-2.7.1 with WASM executables.
 
 
+### Compiling the Neural Network Library in C
+`gcc -Wall *.c -lm -lgsl -lgslcblas -o Output`
+### Compiling the Neural Network Library to WASM
+`emcc *.c -o Output.wasm -I/opt/gsl-2.7.1/include -L/opt/gsl-2.7.1/lib -lgsl -lm -lgslcblas -lc -s STANDALONE_WASM`
+
+### Running WASM files
+
+#### Using Wasmer
+Install [Wasmer](https://github.com/wasmerio/wasmer) using the following command.
+
+`curl https://get.wasmer.io -sSfL | sh`
+
+Run Wasm output file
+
+`wasmer Output.wasm`
+
+#### Using SilverLine Linux Runtime
+
+Follow the Setup steps [here](https://github.com/SilverLineFramework/silverline/wiki/Local-Testing-Guide).
+
+Running the Wasm output file,
+
+Open 4 terminal windows.
+
+Terminal 0: MQTT
+
+`mosquitto`
+
+Terminal 1: Orchestrator
+
+```
+cd orchestrator/arts-main
+make run
+```
+
+Terminal 2: Linux Runtime
+
+In this example, 'dir' is at '/home/ritzdevp/nnlibc'; replace it with the path of the neural network library.
+```
+./runtime-linux/runtime --host=localhost:1883 --name=test --dir=/home/ritzdevp/nnlibc --appdir=/home/ritzdevp/nnlibc
+```
+
+Terminal3: Run
+
+`python3 libsilverline/run.py --path Output.wasm --runtime test`
+
+The output will be visible in Terminal 2.
+
+
+
+
+
 
 
 
