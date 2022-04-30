@@ -256,7 +256,7 @@ int main(){
 
 
     //forward pass
-    for (int i = 0; i < 2000; i++){ //training
+    for (int i = 0; i < 100; i++){ //training
         printf("RUNNING\n");
         gsl_matrix* output = net_forward(myinput, mynet);
         
@@ -302,6 +302,12 @@ int main(){
     // printf("b3\n");
     // tempL = (Linear*)(mynet->layers[4]);
     // x_print(tempL->b);
+
+    gsl_matrix* data = x_init(150,6);
+    FILE * f = fopen ("/Users/riturajsingh/nnlibc/data/data.npy", "rb"); //rb means read binary file
+    gsl_matrix_fread(f, data);
+    fclose (f);
+    x_print(data);
 
     return 0;
 }
