@@ -7,7 +7,7 @@
 #include "layers.h"
 #include "sequential.h"
 #include "loss.h"
-
+#include "data.h"
 
 int main(){
     // Xarr* arr1 = Xinit(2,3);
@@ -303,10 +303,9 @@ int main(){
     // tempL = (Linear*)(mynet->layers[4]);
     // x_print(tempL->b);
 
-    gsl_matrix* data = x_init(150,6);
-    FILE * f = fopen ("/Users/riturajsingh/nnlibc/data/data.npy", "rb"); //rb means read binary file
-    gsl_matrix_fread(f, data);
-    fclose (f);
+    char* path = "/Users/riturajsingh/nnlibc/data/arr2.dat";
+    gsl_matrix* data = load_data(path, 5,6);
+    printf("\nPrinting DATA\n");
     x_print(data);
 
     return 0;
