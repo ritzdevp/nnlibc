@@ -22,9 +22,11 @@ typedef struct Linear {
 
     struct Linear* next;
     struct Linear* prev;
+
+    gsl_rng * rng;
 } Linear;
 
-Linear* linear_init(int input_size, int output_size, int layer_index);
+Linear* linear_init(int input_size, int output_size, int layer_index, gsl_rng * rng);
 
 void linear_free(Linear* linear_layer);
 

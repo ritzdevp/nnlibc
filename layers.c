@@ -4,7 +4,7 @@
 #include <string.h>
 #include "layers.h"
 
-Linear* linear_init(int input_size, int output_size, int layer_index){
+Linear* linear_init(int input_size, int output_size, int layer_index, gsl_rng * rng){
     Linear* linear_layer = malloc(sizeof(Linear));
 
     linear_layer->input_size = input_size;
@@ -14,7 +14,7 @@ Linear* linear_init(int input_size, int output_size, int layer_index){
     linear_layer->W = x_init(input_size, output_size);
     linear_layer->b = x_init(1, output_size);
 
-    x_xavier_init(linear_layer->W);
+    x_xavier_init(linear_layer->W, rng);
     
     return linear_layer;
 }

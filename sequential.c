@@ -47,8 +47,8 @@ void net_backward(gsl_matrix* target, Xnet* net){
     
     //loss item has loss and loss derivative wrt final output
     Loss_Item* L = soft_cross_ent_loss(network_output, target);
-    // printf("Loss\n");
-    // x_print(L->loss);
+    printf("Loss\n");
+    x_print(L->loss);
 
     // printf("Loss derivative %.15f\n", x_mean(L->loss_derivative));
     gsl_matrix* dLdy = x_copy(L->loss_derivative);

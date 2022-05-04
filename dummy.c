@@ -15,6 +15,13 @@ Model reference MNIST
 https://colab.research.google.com/drive/1fqSAG3d0_igznPjUar3DtcQ4Ux23h0LD#scrollTo=AcslG1QeuvXv
 */
 int main(){
+    const gsl_rng_type * T;
+    gsl_rng * rng;
+    gsl_rng_env_setup();
+    T = gsl_rng_default;
+    rng = gsl_rng_alloc(T);
+
+
     int train_len = 2000;
     int test_len = 100;
     
@@ -34,27 +41,28 @@ int main(){
     Xnet* mynet = Xnet_init(3);
 
     //Hidden Layer 1
-    Linear* lin_layer1 = linear_init(784,512,0);
+    Linear* lin_layer1 = linear_init(784,512,0, rng);
     xnet_add(mynet, lin_layer1);
-    Activation* act1 = Act_init("relu", 1);
+    Activation* act1 = Act_init("sigmoid", 1);
     xnet_add(mynet, act1);
 
     //Hidden Layer 2
-    Linear* lin_layer2 = linear_init(512,512,2);
+    Linear* lin_layer2 = linear_init(512,512,2, rng);
     xnet_add(mynet, lin_layer2);
-    Activation* act2 = Act_init("relu", 3);
+    Activation* act2 = Act_init("sigmoid", 3);
     xnet_add(mynet, act2);
 
     //Output Layer
-    Linear* lin_layer3 = linear_init(512,10,4);
+    Linear* lin_layer3 = linear_init(512,10,4, rng);
     xnet_add(mynet, lin_layer3);
-    Activation* act3 = Act_init("relu", 5);
+    Activation* act3 = Act_init("sigmoid", 5);
     xnet_add(mynet, act3);
     
     gsl_matrix* out = net_forward(get_row(x_train, 0), mynet);
-    x_print(out);
-    x_print(lin_layer3->z);
-    x_print(act3->y);
+    // x_print(out);
+    // x_print(lin_layer3->W);
+    // exit(0);;
+    // x_print(act3->y);
     // exit(0);
     // size_t batch_size = 1;
     // x_print(get_row(x_train, 0));
@@ -80,6 +88,7 @@ int main(){
             // printf("Dummy input %.15f\n", x_mean(input));
             // x_print_shape(input);
             gsl_matrix* output = net_forward(input, mynet);
+            // x_print(output);
             // x_print_shape(output);
             gsl_matrix* desired = get_row(y_train, i);
             net_backward(desired, mynet);

@@ -5,6 +5,8 @@
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_statistics.h>
+ #include <gsl/gsl_rng.h>
+#include <gsl/gsl_randist.h>
 
 gsl_matrix* x_init(int row, int cols);
 
@@ -52,6 +54,6 @@ gsl_matrix* get_row(gsl_matrix* arr, size_t row_index);
 
 size_t x_argmax_vector(gsl_matrix* arr);
 
-void x_xavier_init(gsl_matrix* arr);
+void x_xavier_init(gsl_matrix* arr, gsl_rng * rng);
 
 #endif //XARR
