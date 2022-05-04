@@ -22,14 +22,14 @@ void xnet_add(Xnet* net, void* layer){
 gsl_matrix* net_forward(gsl_matrix* input, Xnet* net){
     gsl_matrix* out = forward(input, net->layers[0]);
     out = act_forward(net->layers[1], out);
-    printf("Input %.15f\n", x_mean(input));
+    // printf("Input %.15f\n", x_mean(input));
     
-    printf("Mean = %.15f\n", x_mean(out));
+    // printf("Mean = %.15f\n", x_mean(out));
     for (int i = 2; i < net->num_layers*2; i=i+2){
         //First linear then activation, hence, linears are at even positions
         out = forward(out, (Linear*)net->layers[i]); //linear forward
         out = act_forward((Activation*)net->layers[i + 1], out);
-        printf("Mean = %.15f\n", x_mean(out));
+        // printf("Mean = %.15f\n", x_mean(out));
     }
 
     return out;
@@ -41,8 +41,8 @@ void net_backward(gsl_matrix* target, Xnet* net){
 
     //output of final activiation = output of network
     Activation* act_final = (Activation*)(net->layers[net->num_layers*2-1]);
-    printf("Net out\n");
-    x_print(network_output);
+    // printf("Net out\n");
+    // x_print(network_output);
     gsl_matrix_memcpy(network_output, act_final->y);
     
     //loss item has loss and loss derivative wrt final output

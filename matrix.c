@@ -245,7 +245,7 @@ size_t x_argmax_vector(gsl_matrix* arr){
 void x_xavier_init(gsl_matrix* arr){
     size_t rows = arr->size1;
     size_t cols = arr->size2;
-    double std_dev = sqrt(0.5 * (rows + cols));
+    double std_dev = 0.0000323 * sqrt(0.5 * (rows + cols));
     gsl_matrix_set_all(arr, std_dev);
     //todo: multipy std_dev with normal(0,1) and then set
     //use gsl_ran_gaussian

@@ -11,8 +11,8 @@ Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
     //my logsum exp
     //https://colab.research.google.com/drive/1y0xG8OhUmGzp0-agktAMMVynlMsjZGbl#scrollTo=m5-mW1XYgfjm
 
-    printf("here x\n");
-    x_print(x);
+    // printf("here x\n");
+    // x_print(x);
     double max = gsl_matrix_get(x, 0, 0);
     for (int i = 0; i < x->size1; i++){
         for (int j = 0; j < x->size2; j++){

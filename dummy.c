@@ -19,11 +19,11 @@ int main(){
     int test_len = 100;
     
     //Note: 28x28 image is already flattened to 784 in the data
-    gsl_matrix* x_train = x_scale(load_data("data/mnist_mini/x_train.dat", train_len, 784), 1/255);
+    gsl_matrix* x_train = x_scale(load_data("data/mnist_mini/x_train.dat", train_len, 784), 1.0/255.0);
     x_print_shape(x_train);
     gsl_matrix* y_train = load_data("data/mnist_mini/y_train.dat", train_len, 10); // should it be 1xtrain_len?
     x_print_shape(y_train);
-    gsl_matrix* x_test = x_scale(load_data("data/mnist_mini/x_test.dat", test_len, 784), 1/255);
+    gsl_matrix* x_test = x_scale(load_data("data/mnist_mini/x_test.dat", test_len, 784), 1.0/255.0);
     x_print_shape(x_test);
     gsl_matrix* y_test = load_data("data/mnist_mini/y_test.dat", test_len, 10); //should it be 1xtest_len?
     x_print_shape(y_test);
@@ -36,21 +36,26 @@ int main(){
     //Hidden Layer 1
     Linear* lin_layer1 = linear_init(784,512,0);
     xnet_add(mynet, lin_layer1);
-    Activation* act1 = Act_init("sigmoid", 1);
+    Activation* act1 = Act_init("relu", 1);
     xnet_add(mynet, act1);
 
     //Hidden Layer 2
     Linear* lin_layer2 = linear_init(512,512,2);
     xnet_add(mynet, lin_layer2);
-    Activation* act2 = Act_init("sigmoid", 3);
+    Activation* act2 = Act_init("relu", 3);
     xnet_add(mynet, act2);
 
     //Output Layer
     Linear* lin_layer3 = linear_init(512,10,4);
     xnet_add(mynet, lin_layer3);
-    Activation* act3 = Act_init("sigmoid", 5);
+    Activation* act3 = Act_init("relu", 5);
     xnet_add(mynet, act3);
     
+    gsl_matrix* out = net_forward(get_row(x_train, 0), mynet);
+    x_print(out);
+    x_print(lin_layer3->z);
+    x_print(act3->y);
+    // exit(0);
     // size_t batch_size = 1;
     // x_print(get_row(x_train, 0));
     // gsl_matrix* dummy = get_row(x_train, 0);
@@ -66,14 +71,13 @@ int main(){
     // }
     // printf("THIS %lu\n", x_argmax_vector(hello));
 
-    x_print(x_train);
-    exit(0);
+    // x_print(x_test);
 
     int num_epochs = 3;
     for (int epoch = 0; epoch < num_epochs; epoch++){
         for (int i = 0; i < 1000; i++){
             gsl_matrix* input = get_row(x_train, i);
-            printf("Dummy input %.15f\n", x_mean(input));
+            // printf("Dummy input %.15f\n", x_mean(input));
             // x_print_shape(input);
             gsl_matrix* output = net_forward(input, mynet);
             // x_print_shape(output);

@@ -21,7 +21,7 @@ Linear* linear_init(int input_size, int output_size, int layer_index){
 
 gsl_matrix* forward(gsl_matrix* input, Linear* linear_layer){
     //z = x.dot(W) + b
-    printf("Input for layer %.15f\n", x_mean(input));
+    // printf("Input for layer %.15f\n", x_mean(input));
     linear_layer->x = input;
 
     //Works only for batchsize == 1
