@@ -74,8 +74,8 @@ gsl_matrix* x_transpose(gsl_matrix* arr1){
     return arr1_trans;
 }
 
-
-
+// investigate
+// https://stackoverflow.com/questions/67549023/why-is-the-gnu-scientific-library-matrix-multiplication-slower-than-numpy-matmul
 gsl_matrix* x_dot(gsl_matrix* arr1, gsl_matrix* arr2){
     //https://www.gnu.org/software/gsl/doc/html/blas.html#examples
 
@@ -106,7 +106,7 @@ gsl_matrix* x_dot(gsl_matrix* arr1, gsl_matrix* arr2){
             k++;
         }
     }
-    // printf("Dot success\n");
+
     return ans;
 }
 
