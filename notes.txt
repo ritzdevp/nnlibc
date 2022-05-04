@@ -1,3 +1,6 @@
+GNU GSL Library examples
+http://gnu.ist.utl.pt/software/gsl/manual/html_node/Random-Number-Distribution-Examples.html
+
 gcc *.c -o Output
 ./Output
 

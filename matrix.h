@@ -52,4 +52,6 @@ gsl_matrix* get_row(gsl_matrix* arr, size_t row_index);
 
 size_t x_argmax_vector(gsl_matrix* arr);
 
+void x_xavier_init(gsl_matrix* arr);
+
 #endif //XARR
