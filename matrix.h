@@ -1,16 +1,3 @@
-//shape
-//transpose
-//element wise product
-//matmul, dot product
-//add
-//subtract
-//mean
-//concat
-//reshape
-//sort
-
-// void mxprint(double *arr);
-
 #ifndef XARR
 #define XARR
 
@@ -41,8 +28,10 @@ gsl_matrix* x_multiply(gsl_matrix* arr1, gsl_matrix* arr2);
 //Multiplying a scalar to all elements
 gsl_matrix* x_scale(gsl_matrix* arr1, double k);
 
+//Element wise logarithm
 gsl_matrix* x_log(gsl_matrix* arr);
 
+//Element wise exponentiation
 gsl_matrix* x_exp(gsl_matrix* arr);
 
 gsl_matrix* x_dot(gsl_matrix* arr1, gsl_matrix* arr2);

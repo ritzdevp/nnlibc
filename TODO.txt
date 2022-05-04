@@ -1,2 +1,3 @@
-batch normaliZation
+batch wise training
 sgd with momentum
+batch normaliZation

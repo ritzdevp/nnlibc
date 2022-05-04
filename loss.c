@@ -23,14 +23,8 @@ Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
     
     //x - max
     gsl_matrix* x_minus_max = x_sub(x, all_max);
-    // printf("XMINUSMAXNUM\n");
-    // x_print(x_minus_max);
-    // printf("\n");
 
     gsl_matrix* exp_term = x_exp(x_minus_max);
-    // printf("EXP TERM\n");
-    // x_print(exp_term);
-    // printf("\n");
 
     gsl_matrix* sum_term = x_init(exp_term->size1, 1);
 
@@ -42,15 +36,8 @@ Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
         gsl_matrix_set(sum_term, i, 0, temp);
     }
 
-    // printf("\n");
-
-    // printf("LOG TERM\n");
     gsl_matrix* log_term = x_log(sum_term);
-    // x_print(log_term);
-    // printf("\n");
     
-
-    // printf("LOGSOFT\n");
     gsl_matrix* log_term_temp = x_init(x_minus_max->size1, x_minus_max->size2);
     for (int i = 0; i < log_term_temp->size1; i++){
         for (int j = 0; j < log_term_temp->size2; j++){
@@ -58,18 +45,10 @@ Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
         }
     }
     gsl_matrix* logsoft = x_sub(x_minus_max, log_term_temp);
-    // x_print(logsoft);
-    // printf("\n");
 
-    // printf("SOFTMAX\n");
     gsl_matrix* softmax = x_exp(logsoft);
-    // x_print(softmax);
-    // printf("\n");
 
-    // printf("PROD\n");
     gsl_matrix* prod = x_multiply(y, logsoft);
-    // x_print(prod);
-    // printf("\n");
 
     gsl_matrix* temp_arr = x_init(y->size1, 1);
     for (int i = 0; i < prod->size1; i++){
@@ -81,9 +60,6 @@ Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
     }
 
     gsl_matrix* loss = x_scale(temp_arr, -1);
-    // printf("LOSS\n");
-    // x_print(loss);
-    // printf("\n");
     Loss_Item* loss_item = malloc(sizeof(Loss_Item));
     loss_item->loss = loss; //shape is (batchsize, 1)
 
