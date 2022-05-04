@@ -3,6 +3,7 @@
 #include <math.h>
 #include "sequential.h"
 
+//Does not include input layers
 Xnet* Xnet_init(int num_layers){
     Xnet* net = malloc(sizeof(Xnet));
     net->layers = malloc(sizeof(void*)*num_layers*2); //factor 2 because of activation layer
@@ -30,6 +31,7 @@ gsl_matrix* net_forward(gsl_matrix* input, Xnet* net){
     return out;
 }
 
+//target is the desired output
 void net_backward(gsl_matrix* target, Xnet* net){
     gsl_matrix* network_output = gsl_matrix_calloc(target->size1, target->size2);
 
@@ -39,8 +41,8 @@ void net_backward(gsl_matrix* target, Xnet* net){
     
     //loss item has loss and loss derivative wrt final output
     Loss_Item* L = soft_cross_ent_loss(network_output, target);
-    printf("Loss\n");
-    x_print(L->loss);
+    // printf("Loss\n");
+    // x_print(L->loss);
 
     gsl_matrix* dLdy = x_copy(L->loss_derivative);
     

@@ -5,7 +5,6 @@
 
 typedef struct Xnet {
     int num_layers; //excluding input layer and including output layer
-    //note: activation layer is also considered a layer here
     
     int layer_iterator;
     

@@ -210,3 +210,34 @@ gsl_matrix* x_broadcast_vector(gsl_matrix* arr, int rows){
     }
     return res;
 }
+
+gsl_matrix* get_row(gsl_matrix* arr, size_t row_index){
+    
+    /*
+        This is a clever approach. Get row vector and then assign its
+        data pointer to the data pointer of a matrix of shape 1xcols and return
+        Have to test this later. But works most probably.
+    */
+    // gsl_vector* rowtemp = gsl_vector_calloc(arr->size2);
+    // gsl_matrix_get_row(rowtemp, arr, row_index);
+    // gsl_matrix* row = gsl_matrix_calloc(1, arr->size2);
+    // row->data = rowtemp->data;
+
+    gsl_matrix* row = gsl_matrix_calloc(1, arr->size2);
+    for (int i = 0; i < arr->size2; i++){
+        gsl_matrix_set(row, 0, i, gsl_matrix_get(arr, row_index, i));
+    }
+    return row;
+}
+
+size_t x_argmax_vector(gsl_matrix* arr){
+    double max = gsl_matrix_get(arr, 0, 0);
+    int index = 0;
+    for (int i = 0; i < arr->size2; i++){
+        if (gsl_matrix_get(arr, 0, i) > max){
+            max = gsl_matrix_get(arr, 0, i);
+            index = i;
+        }
+    }
+    return index;
+}

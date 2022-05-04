@@ -15,13 +15,19 @@ typedef struct Activation {
 
 Activation* Act_init(char activation[10], int layer_index);
 
-gsl_matrix* act_identity(gsl_matrix* arr);
+// gsl_matrix* act_identity(gsl_matrix* arr);
 
 gsl_matrix* act_sigmoid(gsl_matrix* arr);
 
+gsl_matrix* act_sigmoid_derivative(gsl_matrix* sigmoided_arr);
+
 gsl_matrix* act_tanh(gsl_matrix* arr);
 
+gsl_matrix* act_tanh_derivative(gsl_matrix* tanhed_arr);
+
 gsl_matrix* act_relu(gsl_matrix* arr);
+
+gsl_matrix* act_relu_derivative(gsl_matrix* relued_arr);
 
 gsl_matrix* act_forward(Activation* activation, gsl_matrix* input);
 

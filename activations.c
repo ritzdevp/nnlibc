@@ -5,11 +5,11 @@
 #include "activations.h"
 
 
-gsl_matrix* act_identity(gsl_matrix* arr){
-    gsl_matrix* res = x_init(arr->size1, arr->size2);
-    gsl_matrix_memcpy(res, arr);
-    return res;
-}
+// gsl_matrix* act_identity(gsl_matrix* arr){
+//     gsl_matrix* res = x_init(arr->size1, arr->size2);
+//     gsl_matrix_memcpy(res, arr);
+//     return res;
+// }
 
 gsl_matrix* act_sigmoid(gsl_matrix* arr){
     gsl_matrix* res = x_init(arr->size1, arr->size2);

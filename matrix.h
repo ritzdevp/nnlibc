@@ -48,4 +48,8 @@ gsl_matrix* x_copy(gsl_matrix* src);
 
 gsl_matrix* x_broadcast_vector(gsl_matrix* arr, int rows);
 
+gsl_matrix* get_row(gsl_matrix* arr, size_t row_index);
+
+size_t x_argmax_vector(gsl_matrix* arr);
+
 #endif //XARR
