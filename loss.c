@@ -64,12 +64,28 @@ Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
     gsl_matrix* loss = x_scale(temp_arr, -1);
     Loss_Item* loss_item = malloc(sizeof(Loss_Item));
     loss_item->loss = loss; //shape is (batchsize, 1)
+    x_print(loss);
 
     // printf("softmax %.15f\n", x_mean(softmax));
     // x_print(softmax);
     // printf("y = %.15f\n", x_mean(y));
     gsl_matrix* loss_deriv = x_sub(softmax, y);
+    // printf("softmax\n");
+    // x_print(softmax);
+    // printf("y = \n");
+    // x_print(y);
     loss_item->loss_derivative = loss_deriv; //shape is (batchsize, number of classes)
+    // printf("loss deriv\n");
     // x_print(loss_deriv);
+    double count = 0;
+    for (int i = 0; i < loss_deriv->size1; i++){
+        for (int j = 0; j < loss_deriv->size2; j++){
+            count += gsl_matrix_get(loss_deriv, i, j);
+        }
+    }
+    // printf("MEAN = %.15f\n", x_mean(loss_deriv));
+    // printf("TRUE MEAN = %.15f\n", count);
+    
+    // x_print(loss_item->loss_derivative);
     return loss_item;
 }

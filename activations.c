@@ -5,11 +5,16 @@
 #include "activations.h"
 
 
-// gsl_matrix* act_identity(gsl_matrix* arr){
-//     gsl_matrix* res = x_init(arr->size1, arr->size2);
-//     gsl_matrix_memcpy(res, arr);
-//     return res;
-// }
+gsl_matrix* act_identity(gsl_matrix* arr){
+    gsl_matrix* res = x_init(arr->size1, arr->size2);
+    gsl_matrix_memcpy(res, arr);
+    return res;
+}
+
+gsl_matrix* act_identity_derivative(gsl_matrix* arr){
+    gsl_matrix* res = x_ones(arr->size1, arr->size2);
+    return res;
+}
 
 gsl_matrix* act_sigmoid(gsl_matrix* arr){
     gsl_matrix* res = x_init(arr->size1, arr->size2);
@@ -96,6 +101,9 @@ gsl_matrix* act_forward(Activation* act, gsl_matrix* input){
     else if (strcmp(act->activation, "tanh") == 0){
         act->y = act_tanh(input);
     }
+    else if (strcmp(act->activation, "identity") == 0){
+        act->y = act_identity(input);
+    }
     return act->y;
 }
 
@@ -108,6 +116,9 @@ gsl_matrix* act_backward(Activation* act){
     }
     else if (strcmp(act->activation, "tanh") == 0){
         act->derivative = act_tanh_derivative(act->y);
+    }
+    else if (strcmp(act->activation, "identity") == 0){
+        act->derivative = act_identity_derivative(act->y);
     }
     return act->derivative; //f'(z)
 }

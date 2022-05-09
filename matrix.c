@@ -245,11 +245,14 @@ size_t x_argmax_vector(gsl_matrix* arr){
 void x_xavier_init(gsl_matrix* arr, gsl_rng * rng){
     size_t rows = arr->size1;
     size_t cols = arr->size2;
-    double std_dev = sqrt(0.5 * (rows + cols));
+    double std_dev = sqrt(2.0/(double)((rows + cols)));
+    double count = 0;
     for (int i = 0; i < rows; i++){
         for (int j = 0; j < cols; j++){
-            double init_val = std_dev * gsl_ran_gaussian(rng, 1);
+            double init_val = gsl_ran_gaussian(rng, std_dev);
+            count += init_val;
             gsl_matrix_set(arr, i, j, init_val);
         }
     }
+    // printf("mean = %.15f\n", count/(double)(rows * cols));
 }

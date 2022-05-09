@@ -1,3 +1,10 @@
 batch wise training
 sgd with momentum
 batch normaliZation
+
+
+Load data through MQTT
+
+TODO: Write good comments like ones in linux-runtime
+
+The problem is that loss derivative sum is always Zero

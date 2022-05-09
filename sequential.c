@@ -47,11 +47,14 @@ void net_backward(gsl_matrix* target, Xnet* net){
     
     //loss item has loss and loss derivative wrt final output
     Loss_Item* L = soft_cross_ent_loss(network_output, target);
-    printf("Loss\n");
-    x_print(L->loss);
+    // printf("Loss\n");
+    // x_print(L->loss);
 
     // printf("Loss derivative %.15f\n", x_mean(L->loss_derivative));
+    // x_print(L->loss_derivative);
     gsl_matrix* dLdy = x_copy(L->loss_derivative);
+    // printf("Dldy\n");
+    // x_print(dLdy);
     
     gsl_matrix* dLdz;
 
@@ -61,6 +64,16 @@ void net_backward(gsl_matrix* target, Xnet* net){
         Activation* act_temp = (Activation*)(net->layers[i]);
 
         dLdz = x_multiply(act_backward(act_temp), dLdy);
+        if (i == 5){
+            // printf("Act back\n");
+            // x_print_shape(act_backward(act_temp));
+            // x_print(act_backward(act_temp));
+            // printf("dldZ\n");
+            // x_print(dLdz);
+        }
+        // printf("HERE LAYER = %d\n", i);
+        // printf("%.15f\n", x_mean(dLdy));
+        // printf("%.15f\n", x_mean(dLdz));
         // printf("Dldy %.15f\n", x_mean(dLdy));
         // printf("Act %.15f\n", x_mean(act_backward(act_temp)));
 
@@ -90,9 +103,15 @@ void net_step(Xnet* net, double learning_rate){
         
         //No momentum
         // printf("meanW = %.15f\n", x_mean(lin_temp->W));
-        // printf("meandLdW = %.15f\n", x_mean(lin_temp->dLdW));
+        if (i % 2 == 0){
+            printf("Layer = %d\n", i);
+            printf("meandLdW = %.15f\n", x_mean(lin_temp->dLdW));
+        }
 
+        // x_print(lin_temp->W);
         gsl_matrix_sub(lin_temp->W, x_scale(lin_temp->dLdW, learning_rate));
+        // printf("OK\n");
+        // x_print(lin_temp->W);
         gsl_matrix_sub(lin_temp->b, x_scale(lin_temp->dLdb, learning_rate));
     }
 }

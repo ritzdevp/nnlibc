@@ -15,6 +15,7 @@ Linear* linear_init(int input_size, int output_size, int layer_index, gsl_rng * 
     linear_layer->b = x_init(1, output_size);
 
     x_xavier_init(linear_layer->W, rng);
+    x_xavier_init(linear_layer->b, rng);
     
     return linear_layer;
 }
@@ -37,9 +38,13 @@ gsl_matrix* backward(Linear* linear_layer, gsl_matrix* dLdz){
     double batch_size = dLdz->size1; //bs
     
     //dldW = (1/bs) * (x.T.dot(dLdz))
-    linear_layer->dLdW = x_scale(x_dot(x_transpose(linear_layer->x), dLdz), (double)(1/batch_size));
+    linear_layer->dLdW = x_scale(x_dot(x_transpose(linear_layer->x), dLdz), (double)(1.0/batch_size));
     // printf("dldW = %.15f\n", x_mean(linear_layer->dLdW));
-    // printf("lin layer x = %.15f\n", x_mean(linear_layer->x));
+    // x_print(linear_layer->dLdW);
+    // printf("dldw mean = %.15f\n", x_mean(linear_layer->dLdW));
+    // exit(0);
+    // printf("LAYER INDEX = %d\n", linear_layer->layer_index);
+    // printf("lin layer x = %.20f\n", x_mean(linear_layer->x));
     // printf("dldZ %.15f\n", x_mean(dLdz));
     
     //dLdb = mean(dLdz, axis=0, keepdims=True)
