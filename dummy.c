@@ -59,13 +59,13 @@ int main(){
     xnet_add(mynet, act3);
     
 
-    printf("KERAS init\n");
-    gsl_matrix* l1 = load_data("data/init_weight_0.dat", 784, 512);
-    gsl_matrix_memcpy(lin_layer1->W, l1);
-    gsl_matrix* l2 = load_data("data/init_weight_2.dat", 512, 512);
-    gsl_matrix_memcpy(lin_layer2->W, l2);
-    gsl_matrix* l3 = load_data("data/init_weight_4.dat", 512, 10);
-    gsl_matrix_memcpy(lin_layer3->W, l3);
+    // printf("KERAS init\n");
+    // gsl_matrix* l1 = load_data("data/init_weight_0.dat", 784, 512);
+    // gsl_matrix_memcpy(lin_layer1->W, l1);
+    // gsl_matrix* l2 = load_data("data/init_weight_2.dat", 512, 512);
+    // gsl_matrix_memcpy(lin_layer2->W, l2);
+    // gsl_matrix* l3 = load_data("data/init_weight_4.dat", 512, 10);
+    // gsl_matrix_memcpy(lin_layer3->W, l3);
     
 
     // gsl_matrix* out = net_forward(get_row(x_train, 0), mynet);
@@ -91,9 +91,9 @@ int main(){
 
     // x_print(x_test);
 
-    int num_epochs = 2;
+    int num_epochs = 3;
     for (int epoch = 0; epoch < num_epochs; epoch++){
-        for (int i = 0; i < 2000; i++){
+        for (int i = 0; i < 1000; i++){
             net_zero_grad(mynet);
             gsl_matrix* input = get_row(x_train, i);
             // printf("Dummy input %.15f\n", x_mean(input));
@@ -110,8 +110,8 @@ int main(){
             // printf("Sum = %.15f\n", sum);
         }
         printf("Epoch %d done.\n", epoch);
-        Linear* lin_temp = (Linear*)mynet->layers[2];
-        x_print_sample(lin_temp->W);
+        // Linear* lin_temp = (Linear*)mynet->layers[2];
+        // x_print_sample(lin_temp->W);
     }
     
     double correct_count = 0;
@@ -128,7 +128,9 @@ int main(){
             correct_count++;
         }
     }
-    double acc = (correct_count/test_len) * 100;
+    printf("correct count %f\n", correct_count);
+    printf("test len = %d\n", test_len);
+    double acc = (correct_count/(double)test_len) * 100;
     printf("Accuracy Percentage = %.3f\n", acc);
 
     // printf("Testing XOR\n");
