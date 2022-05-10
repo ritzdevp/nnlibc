@@ -56,4 +56,6 @@ size_t x_argmax_vector(gsl_matrix* arr);
 
 void x_xavier_init(gsl_matrix* arr, gsl_rng * rng);
 
+void x_print_sample(gsl_matrix* arr);
+
 #endif //XARR

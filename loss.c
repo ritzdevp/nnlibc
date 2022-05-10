@@ -64,7 +64,9 @@ Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
     gsl_matrix* loss = x_scale(temp_arr, -1);
     Loss_Item* loss_item = malloc(sizeof(Loss_Item));
     loss_item->loss = loss; //shape is (batchsize, 1)
-    x_print(loss);
+    
+    // printf("Loss\n");
+    // x_print(loss);
 
     // printf("softmax %.15f\n", x_mean(softmax));
     // x_print(softmax);

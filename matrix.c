@@ -195,6 +195,9 @@ gsl_matrix* x_copy(gsl_matrix* src){
 }
 
 void zerofy_matrix(gsl_matrix* arr){
+    if (arr == NULL){
+        return;
+    }
     for (int i = 0; i < arr->size1*arr->size2; i++){
         arr->data[i] = 0;
     }
@@ -255,4 +258,33 @@ void x_xavier_init(gsl_matrix* arr, gsl_rng * rng){
         }
     }
     // printf("mean = %.15f\n", count/(double)(rows * cols));
+}
+
+void x_print_sample(gsl_matrix* arr){
+    if (arr == NULL){
+        printf("NULL parameter\n");
+        return;
+    }
+    int limit = 2;
+    if (arr->size1 == 1){
+        limit = 1;
+    }
+    int once = 0;
+    for (int i = 0; i < arr->size1; i++){
+        for (int j = 0; j < arr->size2; j++){
+            if (gsl_matrix_get(arr, i, j) != 0){
+                once = 1;
+                break;
+            }
+        }
+    }
+    if (!once){
+        printf("ALL ZEROS!\n");
+    }
+    for (int i = 0; i < limit; i++){
+        for (int j = 0; j < 4;  j++){
+            printf("%.6f ", gsl_matrix_get(arr, i, j));
+        }
+        printf("\n");
+    }
 }
