@@ -1,3 +1,6 @@
+GNU GSL Library examples
+http://gnu.ist.utl.pt/software/gsl/manual/html_node/Random-Number-Distribution-Examples.html
+
 gcc *.c -o Output
 ./Output
 
@@ -51,3 +54,9 @@ emcc *.c -o Output.wasm -I/opt/gsl-2.7.1/include -L/opt/gsl-2.7.1/lib -lgsl -lm 
 To run the wasm executable Output.wasm
 wasmer Output.wasm
 
+
+
+
+Note:
+GSL 2D matrix is actually one big malloced block
+See GSL documentation

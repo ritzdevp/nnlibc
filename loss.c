@@ -1,12 +1,33 @@
+/**
+ * @file loss.c
+ * @brief Contains loss functions
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include "loss.h"
 
-//accepts one hot vector of y
+/**
+ * @brief Softmax categorical cross entropy loss
+ * @note /* x are logits (network output, without softmax) and y are labels
+ * y is one hot encoded. So if there are 5 classes and 1st class is the label 
+ * then y will be [1, 0, 0, 0, 0]
+ *
+ * Using logsumexp trick to avoid overflow
+ * https://gregorygundersen.com/blog/2020/02/09/log-sum-exp/
+ *
+ * Python notebook for reference
+ * //https://colab.research.google.com/drive/1y0xG8OhUmGzp0-agktAMMVynlMsjZGbl#scrollTo=m5-mW1XYgfjm
+
+
+ * @param x Logits
+ * @param y One hot encoded targets
+ * @return Pointer to Loss item
+ */
 Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
-    //using logsumexp trick to avoid overflow
-    //https://gregorygundersen.com/blog/2020/02/09/log-sum-exp/
+    /* using logsumexp trick to avoid overflow */
+    /* https://gregorygundersen.com/blog/2020/02/09/log-sum-exp/ */
     
     //my logsum exp
     //https://colab.research.google.com/drive/1y0xG8OhUmGzp0-agktAMMVynlMsjZGbl#scrollTo=m5-mW1XYgfjm
@@ -21,16 +42,10 @@ Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
     }
     gsl_matrix* all_max = x_scale(x_ones(x->size1, x->size2), max);
     
-    //x - max
+    /* x - max */
     gsl_matrix* x_minus_max = x_sub(x, all_max);
-    // printf("XMINUSMAXNUM\n");
-    // x_print(x_minus_max);
-    // printf("\n");
 
     gsl_matrix* exp_term = x_exp(x_minus_max);
-    // printf("EXP TERM\n");
-    // x_print(exp_term);
-    // printf("\n");
 
     gsl_matrix* sum_term = x_init(exp_term->size1, 1);
 
@@ -42,15 +57,8 @@ Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
         gsl_matrix_set(sum_term, i, 0, temp);
     }
 
-    // printf("\n");
-
-    // printf("LOG TERM\n");
     gsl_matrix* log_term = x_log(sum_term);
-    // x_print(log_term);
-    // printf("\n");
     
-
-    // printf("LOGSOFT\n");
     gsl_matrix* log_term_temp = x_init(x_minus_max->size1, x_minus_max->size2);
     for (int i = 0; i < log_term_temp->size1; i++){
         for (int j = 0; j < log_term_temp->size2; j++){
@@ -58,18 +66,10 @@ Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
         }
     }
     gsl_matrix* logsoft = x_sub(x_minus_max, log_term_temp);
-    // x_print(logsoft);
-    // printf("\n");
 
-    // printf("SOFTMAX\n");
     gsl_matrix* softmax = x_exp(logsoft);
-    // x_print(softmax);
-    // printf("\n");
 
-    // printf("PROD\n");
     gsl_matrix* prod = x_multiply(y, logsoft);
-    // x_print(prod);
-    // printf("\n");
 
     gsl_matrix* temp_arr = x_init(y->size1, 1);
     for (int i = 0; i < prod->size1; i++){
@@ -81,14 +81,15 @@ Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
     }
 
     gsl_matrix* loss = x_scale(temp_arr, -1);
-    // printf("LOSS\n");
-    // x_print(loss);
-    // printf("\n");
     Loss_Item* loss_item = malloc(sizeof(Loss_Item));
-    loss_item->loss = loss; //shape is (batchsize, 1)
-
+    
+    //shape is (batchsize, 1)
+    loss_item->loss = loss; 
+    
     gsl_matrix* loss_deriv = x_sub(softmax, y);
-    loss_item->loss_derivative = loss_deriv; //shape is (batchsize, number of classes)
 
+    //shape is (batchsize, number of classes)
+    loss_item->loss_derivative = loss_deriv;
+    
     return loss_item;
 }

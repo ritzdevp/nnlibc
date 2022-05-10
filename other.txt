@@ -1,0 +1,276 @@
+#include <getopt.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include "activations.h"
+#include "layers.h"
+#include "sequential.h"
+#include "loss.h"
+#include "data.h"
+
+
+/*
+Model reference MNIST
+https://colab.research.google.com/drive/1fqSAG3d0_igznPjUar3DtcQ4Ux23h0LD#scrollTo=AcslG1QeuvXv
+*/
+int main(){
+    const gsl_rng_type * T;
+    gsl_rng * rng;
+    gsl_rng_env_setup();
+    T = gsl_rng_default;
+    rng = gsl_rng_alloc(T);
+
+
+    int train_len = 2000;
+    int test_len = 100;
+    
+    //Note: 28x28 image is already flattened to 784 in the data
+    gsl_matrix* x_train = x_scale(load_data("data/mnist_mini/x_train.dat", train_len, 784), 1.0/255.0);
+    x_print_shape(x_train);
+    gsl_matrix* y_train = load_data("data/mnist_mini/y_train.dat", train_len, 10); // should it be 1xtrain_len?
+    x_print_shape(y_train);
+    gsl_matrix* x_test = x_scale(load_data("data/mnist_mini/x_test.dat", test_len, 784), 1.0/255.0);
+    x_print_shape(x_test);
+    gsl_matrix* y_test = load_data("data/mnist_mini/y_test.dat", test_len, 10); //should it be 1xtest_len?
+    x_print_shape(y_test);
+
+
+    printf("Designing the model\n");
+
+    Xnet* mynet = Xnet_init(3);
+
+    //Hidden Layer 1
+    Linear* lin_layer1 = linear_init(784,512,0, rng);
+    xnet_add(mynet, lin_layer1);
+    Activation* act1 = Act_init("sigmoid", 1);
+    xnet_add(mynet, act1);
+
+    //Hidden Layer 2
+    Linear* lin_layer2 = linear_init(512,512,2, rng);
+    xnet_add(mynet, lin_layer2);
+    Activation* act2 = Act_init("sigmoid", 3);
+    xnet_add(mynet, act2);
+
+    //Output Layer
+    Linear* lin_layer3 = linear_init(512,10,4, rng);
+    xnet_add(mynet, lin_layer3);
+    Activation* act3 = Act_init("identity", 5);
+    xnet_add(mynet, act3);
+    
+    gsl_matrix* out = net_forward(get_row(x_train, 0), mynet);
+    
+
+    // int num_epochs = 2;
+    // for (int epoch = 0; epoch < num_epochs; epoch++){
+    //     for (int i = 0; i < 1000; i++){
+    //         gsl_matrix* input = get_row(x_train, i);
+    //         // printf("Dummy input %.15f\n", x_mean(input));
+    //         // x_print_shape(input);
+    //         gsl_matrix* output = net_forward(input, mynet);
+    //         // x_print(output);
+    //         // x_print_shape(output);
+    //         gsl_matrix* desired = get_row(y_train, i);
+    //         net_backward(desired, mynet);
+
+    //         net_step(mynet, 0.001);
+    //         net_zero_grad(mynet);
+
+    //         // if (i % 500 == 0){
+    //         //     for (int m = 0; m <= 4; m+=2){
+    //         //         printf("Layer %d\n", m);
+    //         //         Linear* lin_temp = (Linear*)mynet->layers[m];
+    //         //         gsl_matrix* wrow = get_row(lin_temp->W, m);
+    //         //         for (int i = 0; i < 10; i++){
+    //         //             printf("%.3f ", gsl_matrix_get(wrow, 0, i));
+    //         //         }
+    //         //     }
+    //         // }
+
+            
+    //         // double sum = x_mean(lin_temp->W);
+    //         // printf("Sum = %.15f\n", sum);
+    //     }
+    //     printf("Epoch %d done.\n", epoch);
+    // }
+
+    // gsl_matrix* weight_0 = load_data("data/weight_0.dat", 784, 512);
+    // gsl_matrix_memcpy(lin_layer1->W, weight_0);
+
+    // gsl_matrix* weight_2 = load_data("data/weight_2.dat", 512, 512);
+    // gsl_matrix_memcpy(lin_layer2->W, weight_2);
+
+    // gsl_matrix* weight_4 = load_data("data/weight_4.dat", 512, 10);
+    // gsl_matrix_memcpy(lin_layer3->W, weight_4);
+    
+    
+    
+
+    
+    double correct_count = 0;
+    for (int i = 0; i < test_len; i++){
+        gsl_matrix* input = get_row(x_test, i);
+        gsl_matrix* output = net_forward(input, mynet);
+        // x_print(output);
+        // break;
+        int prediction = x_argmax_vector(output);
+        // x_print(get_row(y_test, i));
+        int label = x_argmax_vector(get_row(y_test, i));
+        // printf("%d %d\n", prediction, label);
+        if (prediction == label){
+            correct_count++;
+        }
+    }
+    double acc = (correct_count/test_len) * 100;
+    printf("Accuracy Percentage = %f\n", acc);
+
+    // printf("Testing XOR\n");
+    // Xnet* mynet = Xnet_init(3);
+
+    // //Hidden Layer 1
+    // Linear* lin_layer1 = linear_init(2,4,0, rng);
+    // xnet_add(mynet, lin_layer1);
+    // Activation* act1 = Act_init("relu", 1);
+    // xnet_add(mynet, act1);
+
+    // //Hidden Layer 2
+    // Linear* lin_layer2 = linear_init(4,4,2, rng);
+    // xnet_add(mynet, lin_layer2);
+    // Activation* act2 = Act_init("relu", 3);
+    // xnet_add(mynet, act2);
+
+    // //Output Layer
+    // Linear* lin_layer3 = linear_init(4,2,4, rng);
+    // xnet_add(mynet, lin_layer3);
+    // Activation* act3 = Act_init("sigmoid", 5);
+    // xnet_add(mynet, act3);
+
+    // gsl_matrix* myinput = x_init(4,2); //row vector
+    // double temp_arr[4][2] = {
+    //     {0,0}, 
+    //     {0,1},
+    //     {1,0},
+    //     {1,1}
+    //     };
+    // x_fill(myinput, temp_arr);
+    // x_print(myinput);
+
+    // gsl_matrix* labels = x_init(4,2);
+    // double temp_arr2[4][2] = {
+    //     {0,1},
+    //     {1,0},
+    //     {1,0},
+    //     {0,1}
+    // };
+    // x_fill(labels, temp_arr2);
+    // x_print(labels);
+
+    // int num_epochs = 500;
+    // for (int epoch = 0; epoch < num_epochs; epoch++){
+    //     for (int i = 0; i < 4; i++){
+    //         gsl_matrix* input = get_row(myinput, i);
+    //         printf("input is \n");
+    //         x_print(input);
+    //         // printf("Dummy input %.15f\n", x_mean(input));
+    //         // x_print_shape(input);
+    //         gsl_matrix* output = net_forward(input, mynet);
+    //         // printf("OUtput = \n");
+    //         // x_print(output);
+    //         // x_print_shape(output);
+    //         gsl_matrix* desired = get_row(labels, i);
+    //         net_backward(desired, mynet);
+
+    //         net_step(mynet, 0.15);
+    //         net_zero_grad(mynet);
+    //         Linear* lin_temp = (Linear*)mynet->layers[0];
+    //         // double sum = x_mean(lin_temp->W);
+    //         // printf("Sum = %.15f\n", sum);
+    //         printf("\n");
+    //     }
+    //     if (epoch % 100 > 0){
+    //         printf("Epoch %d done.\n", epoch);
+    //     }
+    // }
+
+    // for (int i = 0; i < 4; i++){
+    //     gsl_matrix* input = get_row(myinput, i);
+    //     x_print(net_forward(input, mynet));
+    // }
+
+
+    Xnet* model = Xnet_init(3);
+    //Hidden Layer 1
+    lin_layer1 = linear_init(2,4,0, rng);
+    xnet_add(model, lin_layer1);
+    act1 = Act_init("sigmoid", 1);
+    xnet_add(model, act1);
+
+    //Hidden Layer 2
+    lin_layer2 = linear_init(4,3,2, rng);
+    xnet_add(model, lin_layer2);
+    act2 = Act_init("sigmoid", 3);
+    xnet_add(model, act2);
+
+    //Output Layer
+    lin_layer3 = linear_init(3,2,4, rng);
+    xnet_add(model, lin_layer3);
+    act3 = Act_init("identity", 5);
+    xnet_add(model, act3);
+
+    gsl_matrix* x = x_init(3,2);
+    double tempx[3][2] = {
+        {1,2},
+        {3,7},
+        {4,10}
+    };
+    x_fill(x, tempx);
+
+    gsl_matrix* y = x_init(3,2);
+    double tempy[3][2] = {
+        {1,9},
+        {2,10},
+        {3,6}
+    };
+    x_fill(y, tempy);
+
+    int num_epochs = 10;
+    for (int epoch = 0; epoch < num_epochs; epoch++){
+        for (int i = 0; i < 3; i++){
+            gsl_matrix* input = get_row(x, i);
+            // printf("Dummy input %.15f\n", x_mean(input));
+            // x_print_shape(input);
+            gsl_matrix* output = net_forward(input, model);
+            // x_print(output);
+            // x_print_shape(output);
+            gsl_matrix* desired = get_row(y, i);
+            net_backward(desired, model);
+
+            net_step(model, 0.001);
+            net_zero_grad(model);
+
+            // if (i % 500 == 0){
+            //     for (int m = 0; m <= 4; m+=2){
+            //         printf("Layer %d\n", m);
+            //         Linear* lin_temp = (Linear*)mynet->layers[m];
+            //         gsl_matrix* wrow = get_row(lin_temp->W, m);
+            //         for (int i = 0; i < 10; i++){
+            //             printf("%.3f ", gsl_matrix_get(wrow, 0, i));
+            //         }
+            //     }
+            // }
+
+            
+            // double sum = x_mean(lin_temp->W);
+            // printf("Sum = %.15f\n", sum);
+        }
+        printf("Epoch %d done.\n", epoch);
+    }
+
+    x_print(dummy->)
+
+
+
+
+
+    return 0;
+}
