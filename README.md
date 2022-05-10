@@ -271,3 +271,4 @@ for (int epoch = 0; epoch < num_epochs; epoch++){
     1.000000 1.000000 
     Out = 0
     ```
+![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
