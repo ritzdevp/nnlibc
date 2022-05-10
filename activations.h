@@ -23,9 +23,9 @@ typedef struct Activation {
     gsl_matrix* derivative; //f'(z)
     /* Input to the activation layer */
     gsl_matrix* input;
-    /* Pointer to next activation layer [NOT used in the design yet] */
+    /* Pointer to next layer [NOT used in the design yet] */
     struct Activation* next;
-    /* Pointer to previous activation layer [NOT used in the design yet] */
+    /* Pointer to previous layer [NOT used in the design yet] */
     struct Activation* prev;
 } Activation;
 

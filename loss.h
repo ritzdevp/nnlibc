@@ -1,23 +1,26 @@
+/**
+ * @file loss.h
+ * @brief Loss item struct and methods
+ */
+
 #ifndef LOSS
 #define LOSS
 
-//mean squared error loss
-//cross entropy loss
-
 #include "matrix.h"
 
+/**
+ * @brief Loss item struct
+ */
 typedef struct Loss_Item {
+    /* Loss of shape (batch_size, 1) */
     gsl_matrix* loss;
-    gsl_matrix* loss_derivative; //wrt y
+    /* Derivative of loss wrt output y */
+    gsl_matrix* loss_derivative;
 } Loss_Item;
 
+/* TODO */
 gsl_matrix* mse_loss(gsl_matrix* x, gsl_matrix* y);
 
-/*
-x are logits (network output, without softmax) and y are labels
-y is one hot encoded. So if there are 5 classes and 1st class is the label 
-then y will be [1, 0, 0, 0, 0]
-*/
 Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y);
 
 #endif

@@ -1,3 +1,5 @@
+# TODO: Re-write Makefile
+
 CC = gcc
 
 CFLAGS  = -g -Wall

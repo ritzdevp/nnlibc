@@ -1,3 +1,8 @@
+/**
+ * @file matrix.h
+ * @brief Numpylike wrapper over gsl methods
+ */
+
 #ifndef XARR
 #define XARR
 
@@ -24,16 +29,12 @@ gsl_matrix* x_add(gsl_matrix* arr1, gsl_matrix* arr2);
 
 gsl_matrix* x_sub(gsl_matrix* arr1, gsl_matrix* arr2);
 
-//Element wise multiplication
 gsl_matrix* x_multiply(gsl_matrix* arr1, gsl_matrix* arr2);
 
-//Multiplying a scalar to all elements
 gsl_matrix* x_scale(gsl_matrix* arr1, double k);
 
-//Element wise logarithm
 gsl_matrix* x_log(gsl_matrix* arr);
 
-//Element wise exponentiation
 gsl_matrix* x_exp(gsl_matrix* arr);
 
 gsl_matrix* x_dot(gsl_matrix* arr1, gsl_matrix* arr2);

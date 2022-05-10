@@ -1,12 +1,33 @@
+/**
+ * @file loss.c
+ * @brief Contains loss functions
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include "loss.h"
 
-//accepts one hot vector of y
+/**
+ * @brief Softmax categorical cross entropy loss
+ * @note /* x are logits (network output, without softmax) and y are labels
+ * y is one hot encoded. So if there are 5 classes and 1st class is the label 
+ * then y will be [1, 0, 0, 0, 0]
+ *
+ * Using logsumexp trick to avoid overflow
+ * https://gregorygundersen.com/blog/2020/02/09/log-sum-exp/
+ *
+ * Python notebook for reference
+ * //https://colab.research.google.com/drive/1y0xG8OhUmGzp0-agktAMMVynlMsjZGbl#scrollTo=m5-mW1XYgfjm
+
+
+ * @param x Logits
+ * @param y One hot encoded targets
+ * @return Pointer to Loss item
+ */
 Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
-    //using logsumexp trick to avoid overflow
-    //https://gregorygundersen.com/blog/2020/02/09/log-sum-exp/
+    /* using logsumexp trick to avoid overflow */
+    /* https://gregorygundersen.com/blog/2020/02/09/log-sum-exp/ */
     
     //my logsum exp
     //https://colab.research.google.com/drive/1y0xG8OhUmGzp0-agktAMMVynlMsjZGbl#scrollTo=m5-mW1XYgfjm
@@ -21,7 +42,7 @@ Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
     }
     gsl_matrix* all_max = x_scale(x_ones(x->size1, x->size2), max);
     
-    //x - max
+    /* x - max */
     gsl_matrix* x_minus_max = x_sub(x, all_max);
 
     gsl_matrix* exp_term = x_exp(x_minus_max);
@@ -61,11 +82,14 @@ Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
 
     gsl_matrix* loss = x_scale(temp_arr, -1);
     Loss_Item* loss_item = malloc(sizeof(Loss_Item));
-    loss_item->loss = loss; //shape is (batchsize, 1)
+    
+    //shape is (batchsize, 1)
+    loss_item->loss = loss; 
     
     gsl_matrix* loss_deriv = x_sub(softmax, y);
-    loss_item->loss_derivative = loss_deriv; //shape is (batchsize, number of classes)
+
+    //shape is (batchsize, number of classes)
+    loss_item->loss_derivative = loss_deriv;
     
-    // x_print(loss_item->loss_derivative);
     return loss_item;
 }

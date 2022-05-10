@@ -1,14 +1,24 @@
+/**
+ * @file sequential.h
+ * @brief Network struct and methods
+ */
+
 #include "matrix.h"
 #include "activations.h"
 #include "layers.h"
 #include "loss.h"
 
+/**
+ * @brief Network struct
+ */
 typedef struct Xnet {
-    int num_layers; //excluding input layer and including output layer
+    /* Number of layers in the network excluding input layer and including output layer */
+    int num_layers;
     
+    /* Tracks forward/backward propagation along network */
     int layer_iterator;
     
-    //pointer of pointers pointing to layers
+    /* pointer of pointers pointing to layers */
     void** layers;
 } Xnet;
 

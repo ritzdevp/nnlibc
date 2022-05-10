@@ -1,28 +1,44 @@
+/**
+ * @file layers.h
+ * @brief Linear layer struct and methods
+ */
+
 #ifndef LINEAR
 #define LINEAR
 
-//Linear layer
-
 #include "matrix.h"
 
+/**
+ * @brief Linear layer struct
+ */
 typedef struct Linear {
+    /* Input dimension of linear layer */
     int input_size;
+    /* Output dimension of linear layer */
     int output_size;
-    int layer_index; //TO be used later during network creation
-    char activation[10];
+    /* Index of this layer in the network */
+    int layer_index;
 
-    gsl_matrix* x; //input to this layer
+    /* Input to this layer */
+    gsl_matrix* x;
+    /* Weight matrix */
+    gsl_matrix* W;
+    /* Bias */
+    gsl_matrix* b;
+    /* Output of linear layer */
+    gsl_matrix* z;
 
-    gsl_matrix* W; //Weight matrix
-    gsl_matrix* b; //bias vector
-    gsl_matrix* z; //output vector
-
+    /* Gradient of loss wrt layer weights */
     gsl_matrix* dLdW;
+    /* Gradient of loss wrt biases */
     gsl_matrix* dLdb;
 
+    /* Pointer to next layer [NOT used in the design yet] */
     struct Linear* next;
+    /* Pointer to previous layer [NOT used in the design yet] */
     struct Linear* prev;
-
+    
+    /* Random number generator */
     gsl_rng * rng;
 } Linear;
 
