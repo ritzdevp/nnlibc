@@ -231,23 +231,8 @@ for (int epoch = 0; epoch < num_epochs; epoch++){
 ```
 
 # Model Examples
-- ### MNIST Experiment
-    Copy the contents in models/mnist.c and paste in playground.c
-    Compile and run.
-    The output should be
-    ```
-    shape = (2000, 784)
-    shape = (2000, 10)
-    shape = (100, 784)
-    shape = (100, 10)
-    Designing the model
-    Epoch 0 done.
-    Epoch 1 done.
-    Epoch 2 done.
-    Accuracy Percentage = 65.000
-    ```
-
 - ### XOR Experiment
+    ![alt text](https://github.com/ritzdevp/nnlibc/blob/main/model_examples/nn.png?raw=true)
     Copy the contents in models/xor.c and paste in playground.c
     Compile and run
     The output should be
@@ -271,4 +256,19 @@ for (int epoch = 0; epoch < num_epochs; epoch++){
     1.000000 1.000000 
     Out = 0
     ```
-![alt text](https://github.com/ritzdevp/nnlibc/blob/main/model_examples/nn.png?raw=true)
+    
+- ### MNIST Experiment
+    Copy the contents in models/mnist.c and paste in playground.c
+    Compile and run.
+    The output should be
+    ```
+    shape = (2000, 784)
+    shape = (2000, 10)
+    shape = (100, 784)
+    shape = (100, 10)
+    Designing the model
+    Epoch 0 done.
+    Epoch 1 done.
+    Epoch 2 done.
+    Accuracy Percentage = 65.000
+    ```
