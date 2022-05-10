@@ -1,5 +1,6 @@
 
-# Neural Network in C + WASM Compilation
+# nnlibc
+## Neural Network in C + WASM Compilation
 
   
 
@@ -256,7 +257,7 @@ for (int epoch = 0; epoch < num_epochs; epoch++){
     1.000000 1.000000 
     Out = 0
     ```
-    
+
 - ### MNIST Experiment
     Copy the contents in models/mnist.c and paste in playground.c
     Compile and run.
