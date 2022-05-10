@@ -64,8 +64,9 @@ gsl_matrix* net_forward(gsl_matrix* input, Xnet* net){
  * 
  * @param target Desired output
  * @param net Pointer to network
+ * @return Pointer to Loss Item
  */
-void net_backward(gsl_matrix* target, Xnet* net){
+Loss_Item* net_backward(gsl_matrix* target, Xnet* net){
     gsl_matrix* network_output = gsl_matrix_calloc(target->size1, target->size2);
 
     /* Output of final activiation = output of network */
@@ -86,7 +87,7 @@ void net_backward(gsl_matrix* target, Xnet* net){
         Linear* lin_temp = (Linear*)(net->layers[i - 1]);
         dLdy = backward(lin_temp, dLdz);
     }
-    return;
+    return L;
 }
 
 /**

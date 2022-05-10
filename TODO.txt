@@ -1,8 +1,5 @@
+convolution
 batch wise training
 sgd with momentum
 batch normaliZation
-
-
 Load data through MQTT
-
-TODO: Write good comments like ones in linux-runtime

@@ -1,3 +1,8 @@
+/**
+ * @file playground.c
+ * @brief Main function for loading data, models, training, eval
+ */
+
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,10 +16,12 @@
 
 
 /*
-Model reference MNIST
-https://colab.research.google.com/drive/1fqSAG3d0_igznPjUar3DtcQ4Ux23h0LD#scrollTo=AcslG1QeuvXv
+    Model reference MNIST
+    https://colab.research.google.com/github/AviatorMoser/keras-mnist-tutorial/blob/master/MNIST%20in%20Keras.ipynb#scrollTo=6H9SfEo4V6vn
 */
 int main(){
+
+    // Set up GSL Random Number Generator
     const gsl_rng_type * T;
     gsl_rng * rng;
     gsl_rng_env_setup();
@@ -66,7 +73,7 @@ int main(){
             gsl_matrix* output = net_forward(input, mynet);
             gsl_matrix* desired = get_row(y_train, i);
             net_backward(desired, mynet);
-            net_step(mynet, 0.01);
+            net_step(mynet, 0.01); //lr=0.01
         }
         printf("Epoch %d done.\n", epoch);
     }

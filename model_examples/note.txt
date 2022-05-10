@@ -1,0 +1,1 @@
+For experiments: copy and paste the contents of any file to playground.c

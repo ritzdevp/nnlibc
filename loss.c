@@ -10,7 +10,7 @@
 
 /**
  * @brief Softmax categorical cross entropy loss
- * @note /* x are logits (network output, without softmax) and y are labels
+ * @note x are logits (network output, without softmax) and y are labels
  * y is one hot encoded. So if there are 5 classes and 1st class is the label 
  * then y will be [1, 0, 0, 0, 0]
  *
