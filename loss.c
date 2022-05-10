@@ -11,8 +11,6 @@ Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
     //my logsum exp
     //https://colab.research.google.com/drive/1y0xG8OhUmGzp0-agktAMMVynlMsjZGbl#scrollTo=m5-mW1XYgfjm
 
-    // printf("here x\n");
-    // x_print(x);
     double max = gsl_matrix_get(x, 0, 0);
     for (int i = 0; i < x->size1; i++){
         for (int j = 0; j < x->size2; j++){
@@ -65,28 +63,8 @@ Loss_Item* soft_cross_ent_loss(gsl_matrix* x, gsl_matrix* y){
     Loss_Item* loss_item = malloc(sizeof(Loss_Item));
     loss_item->loss = loss; //shape is (batchsize, 1)
     
-    // printf("Loss\n");
-    // x_print(loss);
-
-    // printf("softmax %.15f\n", x_mean(softmax));
-    // x_print(softmax);
-    // printf("y = %.15f\n", x_mean(y));
     gsl_matrix* loss_deriv = x_sub(softmax, y);
-    // printf("softmax\n");
-    // x_print(softmax);
-    // printf("y = \n");
-    // x_print(y);
     loss_item->loss_derivative = loss_deriv; //shape is (batchsize, number of classes)
-    // printf("loss deriv\n");
-    // x_print(loss_deriv);
-    double count = 0;
-    for (int i = 0; i < loss_deriv->size1; i++){
-        for (int j = 0; j < loss_deriv->size2; j++){
-            count += gsl_matrix_get(loss_deriv, i, j);
-        }
-    }
-    // printf("MEAN = %.15f\n", x_mean(loss_deriv));
-    // printf("TRUE MEAN = %.15f\n", count);
     
     // x_print(loss_item->loss_derivative);
     return loss_item;

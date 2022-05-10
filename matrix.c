@@ -1,15 +1,3 @@
-//shape
-//length
-//transpose
-//element wise product
-//matmul, dot product
-//add
-//subtract
-//mean
-//concat
-//reshape
-//sort
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -50,7 +38,6 @@ gsl_matrix* x_add(gsl_matrix* arr1, gsl_matrix* arr2){
     //gsl_matrix_add does a[i][j] += b[i][j]
     //Hence, we make a copy first, so as to not alter the original array
     gsl_matrix_add(arr1_copy, arr2);
-    // printf("Add success\n");
     return arr1_copy;
 }
 
@@ -257,7 +244,6 @@ void x_xavier_init(gsl_matrix* arr, gsl_rng * rng){
             gsl_matrix_set(arr, i, j, init_val);
         }
     }
-    // printf("mean = %.15f\n", count/(double)(rows * cols));
 }
 
 void x_print_sample(gsl_matrix* arr){
