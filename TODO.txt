@@ -3,3 +3,11 @@ batch wise training
 sgd with momentum
 batch normaliZation
 Load data through MQTT
+Convert this project into actual 'library'
+
+
+Explore DyNet compilation to wasm
+Explore Eigen C++ math library
+Initial problem was how to suppress threading in DyNet
+Explore threads on Silverline WAMR 
+Refer https://web.dev/webassembly-threads/
