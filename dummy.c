@@ -28,11 +28,11 @@ int main(){
     //Note: 28x28 image is already flattened to 784 in the data
     gsl_matrix* x_train = x_scale(load_data("data/mnist_mini/x_train.dat", train_len, 784), 1.0/255.0);
     x_print_shape(x_train);
-    gsl_matrix* y_train = load_data("data/mnist_mini/y_train.dat", train_len, 10); // should it be 1xtrain_len?
+    gsl_matrix* y_train = load_data("data/mnist_mini/y_train.dat", train_len, 10);
     x_print_shape(y_train);
     gsl_matrix* x_test = x_scale(load_data("data/mnist_mini/x_test.dat", test_len, 784), 1.0/255.0);
     x_print_shape(x_test);
-    gsl_matrix* y_test = load_data("data/mnist_mini/y_test.dat", test_len, 10); //should it be 1xtest_len?
+    gsl_matrix* y_test = load_data("data/mnist_mini/y_test.dat", test_len, 10);
     x_print_shape(y_test);
 
 
